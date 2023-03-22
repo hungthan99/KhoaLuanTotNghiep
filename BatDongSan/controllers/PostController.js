@@ -80,6 +80,30 @@ const postController = {
         } catch (err) {
             res.status(500).json(err);
         }
+    },
+
+    findPost: async(req, res) => {
+        try {
+            const posts = await Post.find();
+            const data = [];
+            for (let i = 0; i < posts.length; i++) {
+                if(posts[i].isSell == req.body.isSell || 
+                    posts[i].realEstateType == req.body.realEstateType || 
+                    posts[i].province == req.body.province || 
+                    posts[i].district == req.body.district || 
+                    posts[i].ward == req.body.ward || 
+                    posts[i].price == req.body.price || 
+                    posts[i].acreage == req.body.acreage || 
+                    posts[i].bedroom == req.body.bedroom || 
+                    posts[i].houseDirection == req.body.houseDirection || 
+                    posts[i].project == req.body.project) {
+                        data.push(posts[i]);
+                }
+            }
+            res.status(200).json(data);
+        } catch (err) {
+            res.status(500).json(err);
+        }
     }
 }
 

@@ -15,4 +15,6 @@ router.delete('/:id', authController.verifyToken, postController.deletePost);
 
 router.put('/:id', authController.verifyToken, postController.updatePostStatus);
 
+router.post('/find', authController.verifyToken, postController.findPost);
+
 module.exports = router;

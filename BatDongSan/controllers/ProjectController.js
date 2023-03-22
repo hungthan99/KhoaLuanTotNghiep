@@ -37,6 +37,26 @@ const projectController = {
         } catch (err) {
             res.status(500).json(err);
         }
+    },
+
+    findProject: async(req, res) => {
+        try {
+            const projects = await Project.find();
+            const data = [];
+            for (let i = 0; i < projects.length; i++) {
+                if(projects[i].province == req.body.province ||
+                     projects[i].district == req.body.district ||
+                      projects[i].ward == req.body.ward ||
+                       projects[i].projectType == req.body.projectType ||
+                        projects[i].price == req.body.price ||
+                         projects[i].status == req.body.status) {
+                            data.push(projects[i]);
+                }
+            }
+            res.status(200).json(data);
+        } catch (err) {
+            res.status(500).json(err);
+        }
     }
 }
 

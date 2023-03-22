@@ -10,4 +10,6 @@ router.get('/:id', projectController.getProjectById);
 
 router.put('/:id', projectController.updateInfoProject);
 
+router.post('/find', projectController.findProject);
+
 module.exports = router;
