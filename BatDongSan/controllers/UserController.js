@@ -1,0 +1,186 @@
+const User = require('../models/User');
+const Otp = require('../models/Otp');
+const Post = require('../models/Post');
+
+const otpGenerator = require('otp-generator');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+
+const userController = {
+    register: async(req, res) => {
+        try {
+            const user = await User.findOne({phoneNumber: req.body.phoneNumber});
+            if(user) {
+                return res.status(404).json('Phone number is registered!');
+            }
+            const OTP = otpGenerator.generate(6, {
+                digits: true,
+                alphabets: false,
+                upperCase: false,
+                specialChars: false
+            });
+            console.log(OTP);
+            const phoneNumber = req.body.phoneNumber;
+            const otp = new Otp({phoneNumber: phoneNumber, otp: OTP});
+            const salt = await bcrypt.genSalt(10);
+            otp.otp = await bcrypt.hash(otp.otp, salt);
+            await otp.save();
+            return res.status(200).send("Otp sent to SMS successfully.");
+        } catch (err) {
+            res.status(500).json(err);
+            console.log(err);
+        }
+    },
+
+    cofirmOtp: async(req, res) => {
+        const otpHolder = await Otp.find({
+            phoneNumber: req.body.phoneNumber,
+        })
+        if(otpHolder.length === 0) return res.status(400).send("Otp is invalid!");
+        const rightOtpFind = otpHolder[otpHolder.length - 1];
+        const validUser = await bcrypt.compare(req.body.otp, rightOtpFind.otp);
+        if(rightOtpFind.phoneNumber && req.body.phoneNumber && validUser) {
+            const salt = await bcrypt.genSalt(10);
+            const hashed = await bcrypt.hash(req.body.password, salt);
+            const newUser = new User({
+                phoneNumber: req.body.phoneNumber,
+                password: hashed
+            })
+            const savedUser = await newUser.save();
+            await Otp.deleteMany({
+                phoneNumber: rightOtpFind.phoneNumber
+            });
+            res.status(200).json({'statusCode': 200, 'message': 'User is registered successfully.', savedUser});
+        } else {
+            return res.status(400).send("OTP is wrong!");
+        }
+    },
+
+    signIn: async(req, res) => {
+        try {
+            const user = await User.findOne({phoneNumber: req.body.phoneNumber});
+            if(!user) {
+                return res.status(404).json('Phone number is wrong!');
+            }
+            const password = await bcrypt.compare(
+                req.body.password, user.password
+            )
+            if(!password) {
+                return res.status(404).json('Password is wrong!');
+            }
+            const token = userController.generateAccessToken(user);
+            const refreshToken = userController.generateRefreshToken(user);
+            res.cookie('refreshToken', refreshToken, {
+                httpOnly: true,
+                secure: false,
+                path: '/',
+                sameSite: 'strict'
+            })
+            const loadData = {
+                user,
+                'token': token
+            }
+            return res.status(200).json({'statusCode': 200, 'message': 'Sign in is successfully.', loadData});
+        } catch (err) {
+            console.log(err);
+            res.status(500).json(err);
+        }
+    },
+
+    generateAccessToken: (user) => {
+        return jwt.sign(
+            {
+                id: user.id
+            },
+            process.env.JWT_ACCESS_KEY,
+            { expiresIn: "1h" }
+        );
+    },
+
+    generateRefreshToken: (user) => {
+        return jwt.sign(
+            {
+                id: user.id
+            },
+            process.env.JWT_REFRESH_KEY,
+            { expiresIn: "180d" }
+        );
+    },
+
+    requestRefreshToken: async (req, res) => {
+        const refreshTK = req.cookies.refreshToken;
+        if (!refreshTK) {
+            return res.status(401).json('User is not authentication!');
+        }
+        jwt.verify(refreshTK, process.env.JWT_REFRESH_KEY, (err, user) => {
+            if (err) {
+                return res.status(403).json('RefreshToken is invalid!');
+            }
+            const newAccessToken = userController.generateAccessToken(user);
+            const newRefreshToken = userController.generateRefreshToken(user);
+            res.cookie('refreshToken', newRefreshToken, {
+                httpOnly: true,
+                secure: false,
+                path: "/",
+                sameSite: "strict",
+            });
+            return res.status(200).json({'statusCode': 200, 'message': 'Token is refreshed successfully.', newAccessToken});
+        })
+    },
+
+    signOut: async(req, res) => {
+        res.clearCookie('refreshToken');
+        return res.status(200).json('User is signed out successfully.');
+    },
+
+    getUsers: async(req, res) => {
+        try {
+            const users = await User.find();
+            res.status(200).json(users);
+        } catch (err) {
+            console.log(err);
+            res.status(500).json(err);
+        }
+    },
+
+    getUserById: async(req, res) => {
+        try {
+            const user = await User.findById(req.params.id);
+            res.status(200).json(user);
+        } catch (err) {
+            res.status(500).json(err);
+        }
+    },
+
+    updateInfoUser: async(req, res) => {
+        try {
+            const user = await User.findById(req.params.id);
+            await user.updateOne({$set: req.body});
+            res.status(200).json('Updated information of user successfully.');
+        } catch (err) {
+            res.status(500).json(err);
+        }
+    },
+
+    likePost: async(req, res) => {
+        try {
+            const user = await User.findById(req.params.id);
+            await user.updateOne({$push: {likePosts: req.body.idLikePost}});
+            res.status(200).json('Like this post successfully.');
+        } catch (err) {
+            res.status(500).json(err);
+        }
+    },
+
+    dislikePost: async(req, res) => {
+        try {
+            const user = await User.findById(req.params.id);
+            await user.updateOne({$pull: {likePosts: req.body.idLikePost}});
+            res.status(200).json('Dislike this post successfully.');
+        } catch (err) {
+            res.status(500).json(err);
+        }
+    }
+}
+
+module.exports = userController;
