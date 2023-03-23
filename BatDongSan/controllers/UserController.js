@@ -134,17 +134,21 @@ const userController = {
     getUsers: async(req, res) => {
         try {
             const users = await User.find();
-            const loadData = {
-                'id': users._id,
-                'name': users.name,
-                'phoneNumber': users.phoneNumber,
-                'password': users.password,
-                'email': users.email,
-                'dateOfBirth': users.dateOfBirth,
-                'gender': users.gender,
-                'identityCardNumber': users.identityCardNumber
-            }
-            return res.status(200).json({'statusCode': 200, 'message': 'Get all users successfully.', loadData});
+            const items = [];
+            users.forEach((user) => {
+                const item = {
+                    'id': user._id,
+                    'name': user.name,
+                    'phoneNumber': user.phoneNumber,
+                    'password': user.password,
+                    'email': user.email,
+                    'dateOfBirth': user.dateOfBirth,
+                    'gender': user.gender,
+                    'identityCardNumber': user.identityCardNumber
+                }
+                items.push(item);
+            });
+            return res.status(200).json({'statusCode': 200, 'message': 'Get all users successfully.', 'data': items});
         } catch (err) {
             res.status(500).json(err);
         }

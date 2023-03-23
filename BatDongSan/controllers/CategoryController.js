@@ -14,11 +14,15 @@ const categoryController = {
     getCategories: async(req, res) => {
         try {
             const categories = await Category.find();
-            const data = {
-                'id': categories._id,
-                'name': categories.name
-            }
-            res.status(200).json({status: 200, 'message': 'Get categories successfully.', 'data': data});
+            const items = [];
+            categories.forEach((category) => {
+                const item = {
+                    'id': category._id,
+                    'name': category.name
+                }
+                items.push(item);
+            });
+            res.status(200).json({status: 200, 'message': 'Get categories successfully.', 'data': items});
         } catch (err) {
             res.status(500).json(err);
         }

@@ -19,12 +19,16 @@ const wardController = {
     getWards: async(req, res) => {
         try {
             const wards = await Ward.find();
-            const data = {
-                'id': wards._id,
-                'name': wards.name,
-                'district': wards.district
-            }
-            res.status(200).json({status: 200, 'message': 'Get wards successfully.', 'data': data});
+            const items = [];
+            wards.forEach((ward) => {
+                const item = {
+                    'id': ward._id,
+                    'name': ward.name,
+                    'district': ward.district
+                }
+                items.push(item);
+            });
+            res.status(200).json({status: 200, 'message': 'Get wards successfully.', 'data': items});
         } catch (err) {
             res.status(500).json(err);
         }

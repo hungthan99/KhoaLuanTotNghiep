@@ -14,13 +14,17 @@ const provinceController = {
     getProvinces: async(req, res) => {
         try {
             const provinces = await Province.find();
-            const data = {
-                'id': provinces._id,
-                'name': provinces.name,
-                'lat': provinces.lat,
-                'long': provinces.long
-            }
-            res.status(200).json({status: 200, 'message': 'Get provinces successfully.', 'data': data});
+            const items = [];
+            provinces.forEach((province) => {
+                const item = {
+                    'id': province._id,
+                    'name': province.name,
+                    'lat': province.lat,
+                    'long': province.long
+                }
+                items.push(item);
+            });
+            res.status(200).json({status: 200, 'message': 'Get provinces successfully.', 'data': items});
         } catch (err) {
             res.status(500).json(err);
         }

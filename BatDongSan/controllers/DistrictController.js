@@ -19,12 +19,16 @@ const districtController = {
     getDistricts: async(req, res) => {
         try {
             const districts = await District.find();
-            const data = {
-                'id': districts._id,
-                'name': districts.name,
-                'province': districts.province
-            }
-            res.status(200).json({status: 200, 'message': 'Get districts successfully.', 'data': data});
+            const items = [];
+            districts.forEach((district) => {
+                const item = {
+                    'id': district._id,
+                    'name': district.name,
+                    'province': district.province
+                }
+                items.push(item);
+            });
+            res.status(200).json({status: 200, 'message': 'Get districts successfully.', 'data': items});
         } catch (err) {
             res.status(500).json(err);
         }

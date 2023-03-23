@@ -19,12 +19,16 @@ const postTypeController = {
     getPostTypes: async(req, res) => {
         try {
             const postTypes = await PostType.find();
-            const data = {
-                'id': postTypes._id,
-                'name': postTypes.name,
-                'category': postTypes.category
-            }
-            res.status(200).json({status: 200, 'message': 'Get post types successfully.', 'data': data});
+            const items = [];
+            postTypes.forEach((postType) => {
+                const item = {
+                    'id': postType._id,
+                    'name': postType.name,
+                    'category': postType.category
+                }
+                items.push(item);
+            });
+            res.status(200).json({status: 200, 'message': 'Get post types successfully.', 'data': items});
         } catch (err) {
             res.status(500).json(err);
         }

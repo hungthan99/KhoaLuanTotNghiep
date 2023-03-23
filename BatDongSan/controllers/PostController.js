@@ -34,36 +34,40 @@ const postController = {
     getPosts: async(req, res) => {
         try {
             const posts = await Post.find();
-            const data = {
-                'id': posts._id,
-                'isSell': posts.isSell,
-                'realEstateType': posts.realEstateType,
-                'address': posts.address,
-                'price': posts.price,
-                'acreage': posts.acreage,
-                'bedroom': posts.bedroom,
-                'houseDirection': posts.houseDirection,
-                'lat': posts.lat,
-                'long': posts.long,
-                'title': posts.title,
-                'description': posts.description,
-                'legal': posts.legal,
-                'funiture': posts.funiture,
-                'bathroom': posts.bathroom,
-                'floor': posts.floor,
-                'balconyDirection': posts.balconyDirection,
-                'wayIn': posts.wayIn,
-                'facade': posts.facade,
-                'image': posts.image,
-                'contactName': posts.contactName,
-                'contactNumber': posts.contactNumber,
-                'province': posts.province,
-                'district': posts.district,
-                'ward': posts.ward,
-                'project': posts.project,
-                'user': posts.user
-            }
-            res.status(200).json({status: 200, 'message': 'Get posts successfully.', 'data': data});
+            const items = [];
+            posts.forEach((post) => {
+                const item = {
+                    'id': post._id,
+                    'isSell': post.isSell,
+                    'realEstateType': post.realEstateType,
+                    'address': post.address,
+                    'price': post.price,
+                    'acreage': post.acreage,
+                    'bedroom': post.bedroom,
+                    'houseDirection': post.houseDirection,
+                    'lat': post.lat,
+                    'long': post.long,
+                    'title': post.title,
+                    'description': post.description,
+                    'legal': post.legal,
+                    'funiture': post.funiture,
+                    'bathroom': post.bathroom,
+                    'floor': post.floor,
+                    'balconyDirection': post.balconyDirection,
+                    'wayIn': post.wayIn,
+                    'facade': post.facade,
+                    'image': post.image,
+                    'contactName': post.contactName,
+                    'contactNumber': post.contactNumber,
+                    'province': post.province,
+                    'district': post.district,
+                    'ward': post.ward,
+                    'project': post.project,
+                    'user': post.user
+                }
+                items.push(item);
+            });
+            res.status(200).json({status: 200, 'message': 'Get posts successfully.', 'data': items});
         } catch (err) {
             res.status(500).json(err);
         }

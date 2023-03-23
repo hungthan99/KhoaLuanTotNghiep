@@ -14,26 +14,30 @@ const projectController = {
     getProjects: async(req, res) => {
         try {
             const projects = await Project.find();
-            const data = {
-                'id': projects._id,
-                'projectType': projects.projectType,
-                'price': projects.price,
-                'status': projects.status,
-                'lat': projects.lat,
-                'long': projects.long,
-                'name': projects.name,
-                'image': projects.image,
-                'apartment': projects.apartment,
-                'acreage': projects.acreage,
-                'building': projects.building,
-                'legal': projects.legal,
-                'investor': projects.investor,
-                'description': projects.description,
-                'province': projects.province,
-                'district': projects.district,
-                'ward': projects.ward
-            }
-            res.status(200).json({status: 200, 'message': 'Get projects successfully.', 'data': data});
+            const items = [];
+            projects.forEach((project) => {
+                const item = {
+                    'id': project._id,
+                    'projectType': project.projectType,
+                    'price': project.price,
+                    'status': project.status,
+                    'lat': project.lat,
+                    'long': project.long,
+                    'name': project.name,
+                    'image': project.image,
+                    'apartment': project.apartment,
+                    'acreage': project.acreage,
+                    'building': project.building,
+                    'legal': project.legal,
+                    'investor': project.investor,
+                    'description': project.description,
+                    'province': project.province,
+                    'district': project.district,
+                    'ward': project.ward
+                }
+                items.push(item);
+            });
+            res.status(200).json({status: 200, 'message': 'Get projects successfully.', 'data': items});
         } catch (err) {
             res.status(500).json(err);
         }
