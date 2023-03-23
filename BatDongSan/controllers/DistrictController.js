@@ -1,5 +1,8 @@
 const District = require('../models/District');
 const Province = require('../models/Province');
+const Post = require('../models/Post');
+const Project = require('../models/Project');
+const User = require('../models/User');
 
 const districtController = {
     addDistrict: async(req, res) => {
@@ -53,6 +56,19 @@ const districtController = {
             const district = await District.findById(req.params.id);
             const updatedDistrict = await district.updateOne({$set: req.body});
             res.status(200).json({status: 200, 'message': 'Updated information of district successfully.', 'data': updatedDistrict});
+        } catch (err) {
+            res.status(500).json(err);
+        }
+    },
+
+    deleteDistrict: async(req, res) => {
+        try {
+            await User.updateMany({districts: req.params.id}, {$pull: {districts: req.params.id}});
+            await Post.updateMany({districts: req.params.id}, {$pull: {districts: req.params.id}});
+            await Project.updateMany({districts: req.params.id}, {$pull: {districts: req.params.id}});
+            await Province.updateMany({districts: req.params.id}, {$pull: {districts: req.params.id}});
+            const deletedDistrict = await District.findByIdAndDelete(req.params.id);
+            res.status(200).json({status: 200, 'message': 'Deleted district successfully.', 'data': deletedDistrict});
         } catch (err) {
             res.status(500).json(err);
         }

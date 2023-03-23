@@ -11,4 +11,6 @@ router.get('/:id', authController.verifyToken, districtController.getDistrictByI
 
 router.put('/:id', authController.verifyToken, districtController.updateInfoDistrict);
 
+router.delete('/:id', authController.verifyToken, districtController.deleteDistrict);
+
 module.exports = router;
