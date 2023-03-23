@@ -1,15 +1,16 @@
 const projectController = require('../controllers/ProjectController');
+const authController = require('../controllers/AuthController');
 
 const router = require('express').Router();
 
-router.post('/', projectController.addProject);
+router.post('/', authController.verifyToken, projectController.addProject);
 
-router.get('/', projectController.getProjects);
+router.get('/', authController.verifyToken, projectController.getProjects);
 
-router.get('/:id', projectController.getProjectById);
+router.get('/:id', authController.verifyToken, projectController.getProjectById);
 
-router.put('/:id', projectController.updateInfoProject);
+router.put('/:id', authController.verifyToken, projectController.updateInfoProject);
 
-router.post('/find', projectController.findProject);
+router.post('/find', authController.verifyToken, projectController.findProject);
 
 module.exports = router;

@@ -10,7 +10,7 @@ const wardController = {
                 const district = District.findById(req.body.district);
                 await district.updateOne({$push: {wards: savedWard._id}});
             }
-            res.status(200).json(savedWard);
+            res.status(200).json({status: 200, 'message': 'Add ward successfully.', 'data': savedWard});
         } catch (err) {
             res.status(500).json(err);
         }
@@ -19,7 +19,12 @@ const wardController = {
     getWards: async(req, res) => {
         try {
             const wards = await Ward.find();
-            res.status(200).json(wards);
+            const data = {
+                'id': wards._id,
+                'name': wards.name,
+                'district': wards.district
+            }
+            res.status(200).json({status: 200, 'message': 'Get wards successfully.', 'data': data});
         } catch (err) {
             res.status(500).json(err);
         }
@@ -28,7 +33,12 @@ const wardController = {
     getWardById: async(req, res) => {
         try {
             const ward = await Ward.findById(req.params.id);
-            res.status(200).json(ward);
+            const data = {
+                'id': ward._id,
+                'name': ward.name,
+                'district': ward.district
+            }
+            res.status(200).json({status: 200, 'message': 'Get ward by id successfully.', 'data': data});
         } catch (err) {
             res.status(500).json(err);
         }
@@ -37,8 +47,8 @@ const wardController = {
     updateInfoWard: async(req, res) => {
         try {
             const ward = await Ward.findById(req.params.id);
-            await ward.updateOne({$set: req.body});
-            res.status(200).json('Updated information of ward successfully.');
+            const updatedWard = await ward.updateOne({$set: req.body});
+            res.status(200).json({status: 200, 'message': 'Updated information of ward successfully.', 'data': updatedWard});
         } catch (err) {
             res.status(500).json(err);
         }

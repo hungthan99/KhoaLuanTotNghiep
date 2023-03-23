@@ -10,7 +10,7 @@ const postTypeController = {
                 const category = Category.findById(req.body.category);
                 await category.updateOne({$push: {postTypes: savedPostType._id}});
             }
-            res.status(200).json(savedPostType);
+            res.status(200).json({status: 200, 'message': 'Add post type successfully.', 'data': savedPostType});
         } catch (err) {
             res.status(500).json(err);
         }
@@ -19,7 +19,12 @@ const postTypeController = {
     getPostTypes: async(req, res) => {
         try {
             const postTypes = await PostType.find();
-            res.status(200).json(postTypes);
+            const data = {
+                'id': postTypes._id,
+                'name': postTypes.name,
+                'category': postTypes.category
+            }
+            res.status(200).json({status: 200, 'message': 'Get post types successfully.', 'data': data});
         } catch (err) {
             res.status(500).json(err);
         }
@@ -28,7 +33,12 @@ const postTypeController = {
     getPostTypeById: async(req, res) => {
         try {
             const postType = await PostType.findById(req.params.id);
-            res.status(200).json(postType);
+            const data = {
+                'id': postType._id,
+                'name': postType.name,
+                'category': postType.category
+            }
+            res.status(200).json({status: 200, 'message': 'Get post type by id successfully.', 'data': data});
         } catch (err) {
             res.status(500).json(err);
         }
@@ -37,8 +47,8 @@ const postTypeController = {
     updateInfoPostType: async(req, res) => {
         try {
             const postType = await PostType.findById(req.params.id);
-            await postType.updateOne({$set: req.body});
-            res.status(200).json('Updated information of posttype successfully.');
+            updatedPostType = await postType.updateOne({$set: req.body});
+            res.status(200).json({status: 200, 'message': 'Updated information of posttype successfully.', 'data': updatedPostType});
         } catch (err) {
             res.status(500).json(err);
         }

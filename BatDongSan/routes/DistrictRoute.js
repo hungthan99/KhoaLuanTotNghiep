@@ -1,13 +1,14 @@
 const districtController = require('../controllers/DistrictController');
+const authController = require('../controllers/AuthController');
 
 const router = require('express').Router();
 
-router.post('/', districtController.addDistrict);
+router.post('/', authController.verifyToken, districtController.addDistrict);
 
-router.get('/', districtController.getDistricts);
+router.get('/', authController.verifyToken, districtController.getDistricts);
 
-router.get('/:id', districtController.getDistrictById);
+router.get('/:id', authController.verifyToken, districtController.getDistrictById);
 
-router.put('/:id', districtController.updateInfoDistrict);
+router.put('/:id', authController.verifyToken, districtController.updateInfoDistrict);
 
 module.exports = router;

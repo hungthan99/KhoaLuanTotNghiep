@@ -5,7 +5,7 @@ const projectController = {
         try {
             const newProject = new Project(req.body);
             const savedProject = await newProject.save();
-            res.status(200).json(savedProject);
+            res.status(200).json({status: 200, 'message': 'Add project successfully.', 'data': savedProject});
         } catch (err) {
             res.status(500).json(err);
         }
@@ -14,7 +14,26 @@ const projectController = {
     getProjects: async(req, res) => {
         try {
             const projects = await Project.find();
-            res.status(200).json(projects);
+            const data = {
+                'id': projects._id,
+                'projectType': projects.projectType,
+                'price': projects.price,
+                'status': projects.status,
+                'lat': projects.lat,
+                'long': projects.long,
+                'name': projects.name,
+                'image': projects.image,
+                'apartment': projects.apartment,
+                'acreage': projects.acreage,
+                'building': projects.building,
+                'legal': projects.legal,
+                'investor': projects.investor,
+                'description': projects.description,
+                'province': projects.province,
+                'district': projects.district,
+                'ward': projects.ward
+            }
+            res.status(200).json({status: 200, 'message': 'Get projects successfully.', 'data': data});
         } catch (err) {
             res.status(500).json(err);
         }
@@ -23,7 +42,26 @@ const projectController = {
     getProjectById: async(req, res) => {
         try {
             const project = await Project.findById(req.params.id);
-            res.status(200).json(project);
+            const data = {
+                'id': project._id,
+                'projectType': project.projectType,
+                'price': project.price,
+                'status': project.status,
+                'lat': project.lat,
+                'long': project.long,
+                'name': project.name,
+                'image': project.image,
+                'apartment': project.apartment,
+                'acreage': project.acreage,
+                'building': project.building,
+                'legal': project.legal,
+                'investor': project.investor,
+                'description': project.description,
+                'province': project.province,
+                'district': project.district,
+                'ward': project.ward
+            }
+            res.status(200).json({status: 200, 'message': 'Get project by id successfully.', 'data': data});
         } catch (err) {
             res.status(500).json(err);
         }
@@ -32,8 +70,8 @@ const projectController = {
     updateInfoProject: async(req, res) => {
         try {
             const project = await Project.findById(req.params.id);
-            await project.updateOne({$set: req.body});
-            res.status(200).json('Updated information of project successfully.');
+            const updatedProject = await project.updateOne({$set: req.body});
+            res.status(200).json({status: 200, 'message': 'Updated information of project successfully.', 'data': updatedProject});
         } catch (err) {
             res.status(500).json(err);
         }
@@ -53,7 +91,16 @@ const projectController = {
                             data.push(projects[i]);
                 }
             }
-            res.status(200).json(data);
+            const dataProject = {
+                'id': data._id,
+                'projectType': data.projectType,
+                'price': data.price,
+                'status': data.status,
+                'province': data.province,
+                'district': data.district,
+                'ward': data.ward
+            }
+            res.status(200).json({status: 200, 'message': 'Find list project by information applied successfully.', 'data': dataProject});
         } catch (err) {
             res.status(500).json(err);
         }

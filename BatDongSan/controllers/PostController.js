@@ -25,7 +25,7 @@ const postController = {
                 const project = Project.findById(req.body.project);
                 await project.updateOne({$push: {posts: savedPost._id}});
             }
-            res.status(200).json(savedPost);
+            res.status(200).json({status: 200, 'message': 'Add post successfully.', 'data': savedPost});
         } catch (err) {
             res.status(500).json(err);
         }
@@ -34,7 +34,36 @@ const postController = {
     getPosts: async(req, res) => {
         try {
             const posts = await Post.find();
-            res.status(200).json(posts);
+            const data = {
+                'id': posts._id,
+                'isSell': posts.isSell,
+                'realEstateType': posts.realEstateType,
+                'address': posts.address,
+                'price': posts.price,
+                'acreage': posts.acreage,
+                'bedroom': posts.bedroom,
+                'houseDirection': posts.houseDirection,
+                'lat': posts.lat,
+                'long': posts.long,
+                'title': posts.title,
+                'description': posts.description,
+                'legal': posts.legal,
+                'funiture': posts.funiture,
+                'bathroom': posts.bathroom,
+                'floor': posts.floor,
+                'balconyDirection': posts.balconyDirection,
+                'wayIn': posts.wayIn,
+                'facade': posts.facade,
+                'image': posts.image,
+                'contactName': posts.contactName,
+                'contactNumber': posts.contactNumber,
+                'province': posts.province,
+                'district': posts.district,
+                'ward': posts.ward,
+                'project': posts.project,
+                'user': posts.user
+            }
+            res.status(200).json({status: 200, 'message': 'Get posts successfully.', 'data': data});
         } catch (err) {
             res.status(500).json(err);
         }
@@ -43,7 +72,36 @@ const postController = {
     getPostById: async(req, res) => {
         try {
             const post = await Post.findById(req.params.id);
-            res.status(200).json(post);
+            const data = {
+                'id': post._id,
+                'isSell': post.isSell,
+                'realEstateType': post.realEstateType,
+                'address': post.address,
+                'price': post.price,
+                'acreage': post.acreage,
+                'bedroom': post.bedroom,
+                'houseDirection': post.houseDirection,
+                'lat': post.lat,
+                'long': post.long,
+                'title': post.title,
+                'description': post.description,
+                'legal': post.legal,
+                'funiture': post.funiture,
+                'bathroom': post.bathroom,
+                'floor': post.floor,
+                'balconyDirection': post.balconyDirection,
+                'wayIn': post.wayIn,
+                'facade': post.facade,
+                'image': post.image,
+                'contactName': post.contactName,
+                'contactNumber': post.contactNumber,
+                'province': post.province,
+                'district': post.district,
+                'ward': post.ward,
+                'project': post.project,
+                'user': post.user
+            }
+            res.status(200).json({status: 200, 'message': 'Get post by id successfully.', 'data': data});
         } catch (err) {
             res.status(500).json(err);
         }
@@ -52,8 +110,8 @@ const postController = {
     updateInfoPost: async(req, res) => {
         try {
             const post = await Post.findById(req.params.id);
-            await post.updateOne({$set: req.body});
-            res.status(200).json('Updated information of post successfully.');
+            const updatedPost = await post.updateOne({$set: req.body});
+            res.status(200).json({status: 200, 'message': 'Updated information of post successfully.', 'data': updatedPost});
         } catch (err) {
             res.status(500).json(err);
         }
@@ -65,8 +123,8 @@ const postController = {
             await PostType.updateMany({posts: req.params.id}, {$pull: {posts: req.params.id}});
             await Project.updateMany({posts: req.params.id}, {$pull: {posts: req.params.id}});
             await Province.updateMany({posts: req.params.id}, {$pull: {posts: req.params.id}});
-            await Post.findByIdAndDelete(req.params.id);
-            res.status(200).json('Deleted post successfully.');
+            const deletedPost = await Post.findByIdAndDelete(req.params.id);
+            res.status(200).json({status: 200, 'message': 'Deleted post successfully.', 'data': deletedPost});
         } catch (err) {
             res.status(500).json(err);
         }
@@ -75,8 +133,8 @@ const postController = {
     updatePostStatus: async(req, res) => {
         try {
             const post = await Post.findById(req.params.id);
-            await post.updateOne({$set: {status: false}});
-            res.status(200).json('Updated status of post successfully.');
+            const updatedPost =  await post.updateOne({$set: {status: false}});
+            res.status(200).json({status: 200, 'message': 'Updated status of post successfully.', 'data': updatedPost});
         } catch (err) {
             res.status(500).json(err);
         }
@@ -100,7 +158,21 @@ const postController = {
                         data.push(posts[i]);
                 }
             }
-            res.status(200).json(data);
+            const postData = {
+                'id': data._id,
+                'isSell': data.isSell,
+                'realEstateType': data.realEstateType,
+                'address': data.address,
+                'price': data.price,
+                'acreage': data.acreage,
+                'bedroom': data.bedroom,
+                'houseDirection': data.houseDirection,
+                'province': data.province,
+                'district': data.district,
+                'ward': data.ward,
+                'project': data.project
+            }
+            res.status(200).json({status: 200, 'message': 'Find list post by information applied successfully.', 'data': postData});
         } catch (err) {
             res.status(500).json(err);
         }

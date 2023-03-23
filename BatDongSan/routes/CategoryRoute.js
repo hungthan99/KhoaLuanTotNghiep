@@ -1,13 +1,14 @@
 const categoryController = require('../controllers/CategoryController');
+const authController = require('../controllers/AuthController');
 
 const router = require('express').Router();
 
-router.post('/', categoryController.addCategory);
+router.post('/', authController.verifyToken, categoryController.addCategory);
 
-router.get('/', categoryController.getCategories);
+router.get('/', authController.verifyToken, categoryController.getCategories);
 
-router.get('/:id', categoryController.getCategoryById);
+router.get('/:id', authController.verifyToken, categoryController.getCategoryById);
 
-router.put('/:id', categoryController.updateInfoCategory);
+router.put('/:id', authController.verifyToken, categoryController.updateInfoCategory);
 
 module.exports = router;

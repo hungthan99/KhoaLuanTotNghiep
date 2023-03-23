@@ -11,7 +11,7 @@ const userController = {
         try {
             const user = await User.findOne({phoneNumber: req.body.phoneNumber});
             if(user) {
-                return res.status(404).json('Phone number is registered!');
+                return res.status(404).json({status: 404, 'message': 'Phone number is registered!'});
             }
             const OTP = otpGenerator.generate(6, {
                 digits: true,
@@ -25,10 +25,9 @@ const userController = {
             const salt = await bcrypt.genSalt(10);
             otp.otp = await bcrypt.hash(otp.otp, salt);
             await otp.save();
-            return res.status(200).send("Otp sent to SMS successfully.");
+            return res.status(200).send({status: 200, 'message': 'Otp sent to SMS successfully.'});
         } catch (err) {
             res.status(500).json(err);
-            console.log(err);
         }
     },
 
@@ -36,7 +35,7 @@ const userController = {
         const otpHolder = await Otp.find({
             phoneNumber: req.body.phoneNumber,
         })
-        if(otpHolder.length === 0) return res.status(400).send("Otp is invalid!");
+        if(otpHolder.length === 0) return res.status(400).send({status: 400, 'message': 'Otp is invalid!'});
         const rightOtpFind = otpHolder[otpHolder.length - 1];
         const validUser = await bcrypt.compare(req.body.otp, rightOtpFind.otp);
         if(rightOtpFind.phoneNumber && req.body.phoneNumber && validUser) {
@@ -50,9 +49,9 @@ const userController = {
             await Otp.deleteMany({
                 phoneNumber: rightOtpFind.phoneNumber
             });
-            res.status(200).json({'statusCode': 200, 'message': 'User is registered successfully.', savedUser});
+            res.status(200).json({'statusCode': 200, 'message': 'User is registered successfully.', 'data': savedUser});
         } else {
-            return res.status(400).send("OTP is wrong!");
+            return res.status(400).send({status: 400, 'message': 'OTP is wrong!'});
         }
     },
 
@@ -60,13 +59,13 @@ const userController = {
         try {
             const user = await User.findOne({phoneNumber: req.body.phoneNumber});
             if(!user) {
-                return res.status(404).json('Phone number is wrong!');
+                return res.status(404).json({status: 404, 'message': 'Phone number is wrong!'});
             }
             const password = await bcrypt.compare(
                 req.body.password, user.password
             )
             if(!password) {
-                return res.status(404).json('Password is wrong!');
+                return res.status(404).json({status: 404, 'message': 'Password is wrong!'});
             }
             const token = userController.generateAccessToken(user);
             const refreshToken = userController.generateRefreshToken(user);
@@ -82,7 +81,6 @@ const userController = {
             }
             return res.status(200).json({'statusCode': 200, 'message': 'Sign in is successfully.', loadData});
         } catch (err) {
-            console.log(err);
             res.status(500).json(err);
         }
     },
@@ -110,11 +108,11 @@ const userController = {
     requestRefreshToken: async (req, res) => {
         const refreshTK = req.cookies.refreshToken;
         if (!refreshTK) {
-            return res.status(401).json('User is not authentication!');
+            return res.status(401).json({status: 401, 'message': 'User is not authentication!'});
         }
         jwt.verify(refreshTK, process.env.JWT_REFRESH_KEY, (err, user) => {
             if (err) {
-                return res.status(403).json('RefreshToken is invalid!');
+                return res.status(403).json({status: 403, 'message': 'RefreshToken is invalid!'});
             }
             const newAccessToken = userController.generateAccessToken(user);
             const newRefreshToken = userController.generateRefreshToken(user);
@@ -124,21 +122,30 @@ const userController = {
                 path: "/",
                 sameSite: "strict",
             });
-            return res.status(200).json({'statusCode': 200, 'message': 'Token is refreshed successfully.', newAccessToken});
+            return res.status(200).json({'statusCode': 200, 'message': 'Token is refreshed successfully.', 'newAccessToken': newAccessToken});
         })
     },
 
     signOut: async(req, res) => {
         res.clearCookie('refreshToken');
-        return res.status(200).json('User is signed out successfully.');
+        return res.status(200).json({status: 200, 'message': 'User is signed out successfully.'});
     },
 
     getUsers: async(req, res) => {
         try {
             const users = await User.find();
-            res.status(200).json(users);
+            const loadData = {
+                'id': users._id,
+                'name': users.name,
+                'phoneNumber': users.phoneNumber,
+                'password': users.password,
+                'email': users.email,
+                'dateOfBirth': users.dateOfBirth,
+                'gender': users.gender,
+                'identityCardNumber': users.identityCardNumber
+            }
+            return res.status(200).json({'statusCode': 200, 'message': 'Get all users successfully.', loadData});
         } catch (err) {
-            console.log(err);
             res.status(500).json(err);
         }
     },
@@ -146,7 +153,17 @@ const userController = {
     getUserById: async(req, res) => {
         try {
             const user = await User.findById(req.params.id);
-            res.status(200).json(user);
+            const loadData = {
+                'id': user._id,
+                'name': user.name,
+                'phoneNumber': user.phoneNumber,
+                'password': user.password,
+                'email': user.email,
+                'dateOfBirth': user.dateOfBirth,
+                'gender': user.gender,
+                'identityCardNumber': user.identityCardNumber
+            }
+            return res.status(200).json({'statusCode': 200, 'message': 'Get user by id successfully.', loadData});
         } catch (err) {
             res.status(500).json(err);
         }
@@ -155,8 +172,8 @@ const userController = {
     updateInfoUser: async(req, res) => {
         try {
             const user = await User.findById(req.params.id);
-            await user.updateOne({$set: req.body});
-            res.status(200).json('Updated information of user successfully.');
+            const updatedUser = await user.updateOne({$set: req.body});
+            res.status(200).json({status: 200, 'message': 'Updated information of user successfully.', 'data': updatedUser});
         } catch (err) {
             res.status(500).json(err);
         }
@@ -166,7 +183,7 @@ const userController = {
         try {
             const user = await User.findById(req.params.id);
             await user.updateOne({$push: {likePosts: req.body.idLikePost}});
-            res.status(200).json('Like this post successfully.');
+            res.status(200).json({status: 200, 'message': 'Added this post on like posts successfully.'});
         } catch (err) {
             res.status(500).json(err);
         }
@@ -176,7 +193,7 @@ const userController = {
         try {
             const user = await User.findById(req.params.id);
             await user.updateOne({$pull: {likePosts: req.body.idLikePost}});
-            res.status(200).json('Dislike this post successfully.');
+            res.status(200).json({status: 200, 'message': 'Removed this post from like posts successfully.'});
         } catch (err) {
             res.status(500).json(err);
         }
