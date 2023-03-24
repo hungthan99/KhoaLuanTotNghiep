@@ -1,5 +1,8 @@
 const District = require('../models/District');
 const Ward = require('../models/Ward');
+const Post = require('../models/Post');
+const Project = require('../models/Project');
+const User = require('../models/User');
 
 const wardController = {
     addWard: async(req, res) => {
@@ -53,6 +56,19 @@ const wardController = {
             const ward = await Ward.findById(req.params.id);
             const updatedWard = await ward.updateOne({$set: req.body});
             res.status(200).json({status: 200, 'message': 'Updated information of ward successfully.', 'data': updatedWard});
+        } catch (err) {
+            res.status(500).json(err);
+        }
+    },
+
+    deleteWard: async(req, res) => {
+        try {
+            await User.updateOne({ward: req.params.id}, {$set: {ward: null}});
+            await Post.updateOne({ward: req.params.id}, {$set: {ward: null}});
+            await Project.updateOne({ward: req.params.id}, {$set: {ward: null}});
+            await District.updateMany({wards: req.params.id}, {$pull: {wards: req.params.id}});
+            const deleteWard = await Ward.findByIdAndDelete(req.params.id);
+            res.status(200).json({status: 200, 'message': 'Deleted ward successfully.', 'data': deleteWard});
         } catch (err) {
             res.status(500).json(err);
         }

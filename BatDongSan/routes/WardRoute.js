@@ -11,4 +11,6 @@ router.get('/:id', authController.verifyToken, wardController.getWardById);
 
 router.put('/:id', authController.verifyToken, wardController.updateInfoWard);
 
+router.delete('/:id', authController.verifyToken, wardController.deleteWard);
+
 module.exports = router;

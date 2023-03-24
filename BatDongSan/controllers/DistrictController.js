@@ -63,9 +63,9 @@ const districtController = {
 
     deleteDistrict: async(req, res) => {
         try {
-            await User.updateMany({districts: req.params.id}, {$pull: {districts: req.params.id}});
-            await Post.updateMany({districts: req.params.id}, {$pull: {districts: req.params.id}});
-            await Project.updateMany({districts: req.params.id}, {$pull: {districts: req.params.id}});
+            await User.updateOne({district: req.params.id}, {$set: {district: null}});
+            await Post.updateOne({district: req.params.id}, {$set: {district: null}});
+            await Project.updateOne({district: req.params.id}, {$set: {district: null}});
             await Province.updateMany({districts: req.params.id}, {$pull: {districts: req.params.id}});
             const deletedDistrict = await District.findByIdAndDelete(req.params.id);
             res.status(200).json({status: 200, 'message': 'Deleted district successfully.', 'data': deletedDistrict});

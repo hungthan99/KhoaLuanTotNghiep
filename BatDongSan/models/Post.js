@@ -86,7 +86,7 @@ const postSchema = new mongoose.Schema({
     facade: {
         type: Number
     },
-    image: {
+    images: {
         type: [String],
         required: true
     },
