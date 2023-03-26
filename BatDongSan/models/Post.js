@@ -6,7 +6,7 @@ const postSchema = new mongoose.Schema({
         required: true
     },
     realEstateType: {
-        type: Number,
+        type: String,
         required: true
     },
     province: {
@@ -60,10 +60,10 @@ const postSchema = new mongoose.Schema({
         required: true
     },
     legal: {
-        type: Number
+        type: String
     },
     funiture: {
-        type: Number
+        type: String
     },
     bedroom: {
         type: Number
@@ -75,10 +75,10 @@ const postSchema = new mongoose.Schema({
         type: Number
     },
     houseDirection: {
-        type: Number
+        type: String
     },
     balconyDirection: {
-        type: Number
+        type: String
     },
     wayIn: {
         type: Number
@@ -98,6 +98,14 @@ const postSchema = new mongoose.Schema({
         type: Boolean,
         required: true,
         default: true
+    },
+    contactName: {
+        type: String,
+        required: true
+    },
+    contactPhoneNumber: {
+        type: String,
+        required: true
     }
 })
 

@@ -13,6 +13,6 @@ router.put('/:id', authController.verifyToken, wardController.updateInfoWard);
 
 router.delete('/:id', authController.verifyToken, wardController.deleteWard);
 
-router.post('/list', authController.verifyToken, wardController.getWardsByDistrict);
+router.get('/:id', authController.verifyToken, wardController.getWardsByDistrict);
 
 module.exports = router;

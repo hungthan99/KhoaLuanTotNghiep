@@ -13,6 +13,6 @@ router.put('/:id', authController.verifyToken, districtController.updateInfoDist
 
 router.delete('/:id', authController.verifyToken, districtController.deleteDistrict);
 
-router.post('/list', authController.verifyToken, districtController.getDistrictsByProvince);
+router.get('/:id', authController.verifyToken, districtController.getDistrictsByProvince);
 
 module.exports = router;

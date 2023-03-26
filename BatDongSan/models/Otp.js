@@ -9,7 +9,7 @@ const optSchema = new mongoose.Schema({
         type: String,
         require: true
     },
-    createAt: { type: Date, default: Date.now, index: { expires: 300 } }
+    createAt: { type: Date, default: Date.now, index: { expires: 60 } }
 })
 
 module.exports = mongoose.model('OTP', optSchema);
