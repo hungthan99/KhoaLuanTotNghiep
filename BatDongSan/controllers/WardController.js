@@ -72,6 +72,24 @@ const wardController = {
         } catch (err) {
             res.status(500).json(err);
         }
+    },
+
+    getWardsByDistrict: async(req, res) => {
+        try {
+            const wards = await Ward.find({district: req.body.district});
+            const items = [];
+            wards.forEach((ward) => {
+                const item = {
+                    'id': ward._id,
+                    'name': ward.name,
+                    'district': ward.district
+                }
+                items.push(item);
+            });
+            res.status(200).json({status: 200, 'message': 'Get wards of district successfully.', 'data': items});
+        } catch (err) {
+            res.status(500).json(err);
+        }
     }
 }
 
