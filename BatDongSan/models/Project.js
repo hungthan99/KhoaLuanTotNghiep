@@ -29,15 +29,15 @@ const projectSchema = new mongoose.Schema({
         required: true
     },
     projectType: {
-        type: Number,
+        type: String,
         required: true
     },
     price: {
-        type: Number,
+        type: String,
         required: true
     },
     status: {
-        type: Number,
+        type: String,
         required: true
     },
     lat: {
@@ -57,16 +57,16 @@ const projectSchema = new mongoose.Schema({
         required: true
     },
     apartment: {
-        type: Number
+        type: String
     },
     acreage: {
-        type: Number
+        type: String
     },
     building: {
-        type: Number
+        type: String
     },
     legal: {
-        type: Number
+        type: String
     },
     investor: {
         type: String,

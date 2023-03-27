@@ -12,7 +12,9 @@ const postController = {
                     realEstateType: req.body.realEstateType,
                     address: req.body.address,
                     price: req.body.price,
+                    priceRange: req.body.priceRange,
                     acreage: req.body.acreage,
+                    acreageRange: req.body.acreageRange,
                     bedroom: req.body.bedroom,
                     houseDirection: req.body.houseDirection,
                     lat: req.body.lat,
@@ -87,7 +89,8 @@ const postController = {
                     'facade': post.facade,
                     'images': post.images,
                     'contactName': post.contactName,
-                    'contactNumber': post.contactNumber,
+                    'contactNumber': post.contactPhoneNumber,
+                    'status': post.status,
                     'province': post.province,
                     'district': post.district,
                     'ward': post.ward,
@@ -157,8 +160,8 @@ const postController = {
             await PostType.updateMany({posts: req.params.id}, {$pull: {posts: req.params.id}});
             await Project.updateMany({posts: req.params.id}, {$pull: {posts: req.params.id}});
             await Province.updateMany({posts: req.params.id}, {$pull: {posts: req.params.id}});
-            const deletedPost = await Post.findByIdAndDelete(req.params.id);
-            res.status(200).json({status: 200, message: 'Deleted post successfully.', data: deletedPost});
+            await Post.findByIdAndDelete(req.params.id);
+            res.status(200).json({status: 200, message: 'Deleted post successfully.', data: null});
         } catch (err) {
             res.status(500).json(err);
         }
@@ -167,8 +170,12 @@ const postController = {
     updatePostStatus: async(req, res) => {
         try {
             const post = await Post.findById(req.params.id);
-            const updatedPost =  await post.updateOne({$set: {status: false}});
-            res.status(200).json({status: 200, message: 'Updated status of post successfully.', data: updatedPost});
+            if(post.status == true) {
+                await post.updateOne({$set: {status: false}});
+            } else {
+                await post.updateOne({$set: {status: true}});
+            }
+            res.status(200).json({status: 200, message: 'Updated status of post successfully.', data: null});
         } catch (err) {
             res.status(500).json(err);
         }
@@ -198,6 +205,7 @@ const postController = {
             res.status(200).json({status: 200, message: 'Find list post by information applied successfully.', data: data});
         } catch (err) {
             res.status(500).json(err);
+            console.log(err);
         }
     }
 }

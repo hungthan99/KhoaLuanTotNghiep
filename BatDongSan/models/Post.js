@@ -67,8 +67,16 @@ const postSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    acreageRange: {
+        type: String,
+        required: true
+    },
     price: {
         type: Number,
+        required: true
+    },
+    priceRange: {
+        type: String,
         required: true
     },
     legal: {

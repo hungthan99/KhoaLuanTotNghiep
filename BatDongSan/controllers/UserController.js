@@ -86,6 +86,7 @@ const userController = {
                 'dateOfBirth': user.dateOfBirth,
                 'gender': user.gender,
                 'identityCardNumber': user.identityCardNumber,
+                'likePosts': user.likePosts,
                 'token': token
             }
             return res.status(200).json({status: 200, message: 'Sign in is successfully.', data: loadData});
@@ -153,7 +154,8 @@ const userController = {
                     'email': user.email,
                     'dateOfBirth': user.dateOfBirth,
                     'gender': user.gender,
-                    'identityCardNumber': user.identityCardNumber
+                    'identityCardNumber': user.identityCardNumber,
+                    'likePosts': user.likePosts
                 }
                 items.push(item);
             });
@@ -186,7 +188,7 @@ const userController = {
         try {
             const user = await User.findById(req.params.id);
             const updatedUser = await user.updateOne({$set: req.body});
-            res.status(200).json({status: 200, message: 'Updated information of user successfully.', data: updatedUser});
+            res.status(200).json({status: 200, message: 'Updated information of user successfully.', data: null});
         } catch (err) {
             res.status(500).json(err);
         }
@@ -194,7 +196,7 @@ const userController = {
 
     likePost: async(req, res) => {
         try {
-            const user = req.user;
+            const user = await User.findById(req.user.id);
             await user.updateOne({$push: {likePosts: req.params.id}});
             res.status(200).json({status: 200, message: 'Added this post on like posts successfully.', data: null});
         } catch (err) {
@@ -204,7 +206,7 @@ const userController = {
 
     dislikePost: async(req, res) => {
         try {
-            const user = req.user;
+            const user = await User.findById(req.user.id);
             await user.updateOne({$pull: {likePosts: req.params.id}});
             res.status(200).json({status: 200, message: 'Removed this post from like posts successfully.', data: null});
         } catch (err) {

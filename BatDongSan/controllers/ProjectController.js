@@ -5,7 +5,7 @@ const projectController = {
         try {
             const newProject = new Project(req.body);
             const savedProject = await newProject.save();
-            res.status(200).json({status: 200, message: 'Add project successfully.', data: savedProject});
+            res.status(200).json({status: 200, message: 'Add project successfully.', data: null});
         } catch (err) {
             res.status(500).json(err);
         }

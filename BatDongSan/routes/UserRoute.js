@@ -19,8 +19,8 @@ router.get('/:id', authController.verifyToken, userController.getUserById);
 
 router.put('/:id', authController.verifyToken, userController.updateInfoUser);
 
-router.put('/:id', authController.verifyToken, userController.likePost);
+router.put('/like-post/:id', authController.verifyToken, userController.likePost);
 
-router.put('/:id', authController.verifyToken, userController.dislikePost);
+router.put('/dislike-post/:id', authController.verifyToken, userController.dislikePost);
 
 module.exports = router;
