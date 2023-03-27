@@ -9,20 +9,32 @@ const postSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    // province: {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     required: true,
+    //     ref: 'Province'
+    // },
+    // district: {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     required: true,
+    //     ref: 'District'
+    // },
+    // ward: {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     required: true,
+    //     ref: 'Ward'
+    // },
     province: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: true,
-        ref: 'Province'
+        type: String,
+        required: true
     },
     district: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: true,
-        ref: 'District'
+        type: String,
+        required: true
     },
     ward: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: true,
-        ref: 'Ward'
+        type: String,
+        required: true
     },
     address: {
         type: String

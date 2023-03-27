@@ -1,19 +1,31 @@
 const mongoose = require('mongoose');
 
 const projectSchema = new mongoose.Schema({
+    // province: {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: 'Province',
+    //     required: true
+    // },
+    // district: {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: 'District',
+    //     required: true
+    // },
+    // ward: {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: 'Ward',
+    //     required: true
+    // },
     province: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Province',
+        type: String,
         required: true
     },
     district: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'District',
+        type: String,
         required: true
     },
     ward: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Ward',
+        type: String,
         required: true
     },
     projectType: {
