@@ -7,7 +7,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
 const userController = {
-    register: async(req, res) => {
+    sendOtp: async(req, res) => {
         try {
             const user = await User.findOne({phoneNumber: req.body.phoneNumber});
             if(user) {
@@ -38,6 +38,30 @@ const userController = {
             const otpHolder = await Otp.find({
                 phoneNumber: req.body.phoneNumber,
             })
+            if(otpHolder) {
+                if(otpHolder.length === 0) return res.status(400).send({status: 400, message: 'Phone number is wrong!', payload: null});
+            }
+            if(otpHolder.length === 0) return res.status(400).send({status: 400, message: 'Otp is invalid!', payload: null});
+            const rightOtpFind = otpHolder[otpHolder.length - 1];
+            const validUser = await bcrypt.compare(req.body.otp, rightOtpFind.otp);
+            if(rightOtpFind.phoneNumber && req.body.phoneNumber && validUser) {
+                res.status(200).json({status: 200, message: 'Otp is confirmed successfully.', payload: null});
+            } else {
+                return res.status(400).send({status: 400, message: 'OTP is wrong!', payload: null});
+            }
+        } catch (err) {
+            res.status(500).json(err);
+        }
+    },
+
+    register: async(req, res) => {
+        try {
+            const otpHolder = await Otp.find({
+                phoneNumber: req.body.phoneNumber,
+            })
+            if(otpHolder) {
+                if(otpHolder.length === 0) return res.status(400).send({status: 400, message: 'Phone number is wrong!', payload: null});
+            }
             if(otpHolder.length === 0) return res.status(400).send({status: 400, message: 'Otp is invalid!', payload: null});
             const rightOtpFind = otpHolder[otpHolder.length - 1];
             const validUser = await bcrypt.compare(req.body.otp, rightOtpFind.otp);

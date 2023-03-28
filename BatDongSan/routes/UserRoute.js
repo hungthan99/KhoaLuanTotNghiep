@@ -3,9 +3,11 @@ const authController = require('../controllers/AuthController');
 
 const router = require('express').Router();
 
-router.post('/register', userController.register);
+router.post('/send-otp', userController.sendOtp);
 
-router.post('/register/confirmotp', authController.verifyToken, userController.cofirmOtp);
+router.post('/confirm-otp', userController.cofirmOtp);
+
+router.post('/register', userController.register);
 
 router.post('/signin', userController.signIn);
 
