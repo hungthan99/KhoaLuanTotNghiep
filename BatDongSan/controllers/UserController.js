@@ -11,7 +11,7 @@ const userController = {
         try {
             const user = await User.findOne({phoneNumber: req.body.phoneNumber});
             if(user) {
-                return res.status(404).json({status: 404, 'message': 'Phone number is registered!'});
+                return res.status(404).json({status: 404, 'message': 'Phone number is registered!', payload: null});
             }
             const OTP = otpGenerator.generate(6, {
                 digit: true,
@@ -27,53 +27,57 @@ const userController = {
             const salt = await bcrypt.genSalt(10);
             otp.otp = await bcrypt.hash(otp.otp, salt);
             await otp.save();
-            return res.status(200).send({status: 200, message: 'Otp sent to SMS successfully.', data: null});
+            return res.status(200).send({status: 200, message: 'Otp sent to SMS successfully.', payload: null});
         } catch (err) {
             res.status(500).json(err);
         }
     },
 
     cofirmOtp: async(req, res) => {
-        const otpHolder = await Otp.find({
-            phoneNumber: req.body.phoneNumber,
-        })
-        if(otpHolder.length === 0) return res.status(400).send({status: 400, message: 'Otp is invalid!', data: null});
-        const rightOtpFind = otpHolder[otpHolder.length - 1];
-        const validUser = await bcrypt.compare(req.body.otp, rightOtpFind.otp);
-        if(rightOtpFind.phoneNumber && req.body.phoneNumber && validUser) {
-            const salt = await bcrypt.genSalt(10);
-            const hashed = await bcrypt.hash(req.body.password, salt);
-            const newUser = new User({
+        try {
+            const otpHolder = await Otp.find({
                 phoneNumber: req.body.phoneNumber,
-                password: hashed
             })
-            const token = userController.generateAccessToken(newUser);
-            const refreshToken = userController.generateRefreshToken(newUser);
-            res.cookie('refreshToken', refreshToken, {
-                httpOnly: true,
-                secure: false,
-                path: '/',
-                sameSite: 'strict'
-            })
-            const savedUser = await newUser.save();
-            const loadData = {
-                'id': savedUser._id,
-                'name': savedUser.name,
-                'phoneNumber': savedUser.phoneNumber,
-                'password': savedUser.password,
-                'email': savedUser.email,
-                'dateOfBirth': savedUser.dateOfBirth,
-                'gender': savedUser.gender,
-                'identityCardNumber': savedUser.identityCardNumber,
-                'likePosts': savedUser.likePosts,
-                'token': token
+            if(otpHolder.length === 0) return res.status(400).send({status: 400, message: 'Otp is invalid!', payload: null});
+            const rightOtpFind = otpHolder[otpHolder.length - 1];
+            const validUser = await bcrypt.compare(req.body.otp, rightOtpFind.otp);
+            if(rightOtpFind.phoneNumber && req.body.phoneNumber && validUser) {
+                const salt = await bcrypt.genSalt(10);
+                const hashed = await bcrypt.hash(req.body.password, salt);
+                const newUser = new User({
+                    phoneNumber: req.body.phoneNumber,
+                    password: hashed
+                })
+                const token = userController.generateAccessToken(newUser);
+                const refreshToken = userController.generateRefreshToken(newUser);
+                res.cookie('refreshToken', refreshToken, {
+                    httpOnly: true,
+                    secure: false,
+                    path: '/',
+                    sameSite: 'strict'
+                })
+                const savedUser = await newUser.save();
+                const loadData = {
+                    'id': savedUser._id,
+                    'name': savedUser.name,
+                    'phoneNumber': savedUser.phoneNumber,
+                    'password': savedUser.password,
+                    'email': savedUser.email,
+                    'dateOfBirth': savedUser.dateOfBirth,
+                    'gender': savedUser.gender,
+                    'identityCardNumber': savedUser.identityCardNumber,
+                    'likePosts': savedUser.likePosts,
+                    'token': token
+                }
+                await Otp.deleteMany({
+                    phoneNumber: rightOtpFind.phoneNumber
+                });
+                res.status(200).json({status: 200, message: 'User is registered successfully.', payload: loadData});
+            } else {
+                return res.status(400).send({status: 400, message: 'OTP is wrong!', payload: null});
             }
-            await Otp.deleteMany({
-                phoneNumber: rightOtpFind.phoneNumber
-            });
-            res.status(200).json({status: 200, message: 'User is registered successfully.', data: loadData});
-        } else {
-            return res.status(400).send({status: 400, message: 'OTP is wrong!', data: null});
+        } catch (err) {
+            res.status(500).json(err);
         }
     },
 
@@ -81,13 +85,13 @@ const userController = {
         try {
             const user = await User.findOne({phoneNumber: req.body.phoneNumber});
             if(!user) {
-                return res.status(404).json({status: 404, message: 'Phone number is wrong!', data: null});
+                return res.status(404).json({status: 404, message: 'Phone number is wrong!', payload: null});
             }
             const password = await bcrypt.compare(
                 req.body.password, user.password
             )
             if(!password) {
-                return res.status(404).json({status: 404, message: 'Password is wrong!', data: null});
+                return res.status(404).json({status: 404, message: 'Password is wrong!', payload: null});
             }
             const token = userController.generateAccessToken(user);
             const refreshToken = userController.generateRefreshToken(user);
@@ -109,7 +113,7 @@ const userController = {
                 'likePosts': user.likePosts,
                 'token': token
             }
-            return res.status(200).json({status: 200, message: 'Sign in is successfully.', data: loadData});
+            return res.status(200).json({status: 200, message: 'Sign in is successfully.', payload: loadData});
         } catch (err) {
             res.status(500).json(err);
         }
@@ -138,11 +142,11 @@ const userController = {
     requestRefreshToken: async (req, res) => {
         const refreshTK = req.cookies.refreshToken;
         if (!refreshTK) {
-            return res.status(401).json({status: 401, message: 'User is not authentication!', data: null});
+            return res.status(401).json({status: 401, message: 'User is not authentication!', payload: null});
         }
         jwt.verify(refreshTK, process.env.JWT_REFRESH_KEY, (err, user) => {
             if (err) {
-                return res.status(403).json({status: 403, 'message': 'RefreshToken is invalid!'});
+                return res.status(403).json({status: 403, 'message': 'RefreshToken is invalid!', payload: null});
             }
             const newAccessToken = userController.generateAccessToken(user);
             const newRefreshToken = userController.generateRefreshToken(user);
@@ -158,7 +162,7 @@ const userController = {
 
     signOut: async(req, res) => {
         res.clearCookie('refreshToken');
-        return res.status(200).json({status: 200, message: 'User is signed out successfully.', data: null});
+        return res.status(200).json({status: 200, message: 'User is signed out successfully.', payload: null});
     },
 
     getUsers: async(req, res) => {
@@ -179,7 +183,7 @@ const userController = {
                 }
                 items.push(item);
             });
-            return res.status(200).json({status: 200, message: 'Get all users successfully.', data: items});
+            return res.status(200).json({status: 200, message: 'Get all users successfully.', payload: items});
         } catch (err) {
             res.status(500).json(err);
         }
@@ -198,7 +202,7 @@ const userController = {
                 'gender': user.gender,
                 'identityCardNumber': user.identityCardNumber
             }
-            return res.status(200).json({status: 200, message: 'Get user by id successfully.', data: loadData});
+            return res.status(200).json({status: 200, message: 'Get user by id successfully.', payload: loadData});
         } catch (err) {
             res.status(500).json(err);
         }
@@ -208,7 +212,7 @@ const userController = {
         try {
             const user = await User.findById(req.params.id);
             const updatedUser = await user.updateOne({$set: req.body});
-            res.status(200).json({status: 200, message: 'Updated information of user successfully.', data: null});
+            res.status(200).json({status: 200, message: 'Updated information of user successfully.', payload: null});
         } catch (err) {
             res.status(500).json(err);
         }
@@ -218,7 +222,7 @@ const userController = {
         try {
             const user = await User.findById(req.user.id);
             await user.updateOne({$push: {likePosts: req.params.id}});
-            res.status(200).json({status: 200, message: 'Added this post on like posts successfully.', data: null});
+            res.status(200).json({status: 200, message: 'Added this post on like posts successfully.', payload: null});
         } catch (err) {
             res.status(500).json(err);
         }
@@ -228,7 +232,7 @@ const userController = {
         try {
             const user = await User.findById(req.user.id);
             await user.updateOne({$pull: {likePosts: req.params.id}});
-            res.status(200).json({status: 200, message: 'Removed this post from like posts successfully.', data: null});
+            res.status(200).json({status: 200, message: 'Removed this post from like posts successfully.', payload: null});
         } catch (err) {
             res.status(500).json(err);
         }

@@ -5,7 +5,7 @@ const projectController = {
         try {
             const newProject = new Project(req.body);
             const savedProject = await newProject.save();
-            res.status(200).json({status: 200, message: 'Add project successfully.', data: null});
+            res.status(200).json({status: 200, message: 'Add project successfully.', payload: null});
         } catch (err) {
             res.status(500).json(err);
         }
@@ -37,7 +37,7 @@ const projectController = {
                 }
                 items.push(item);
             });
-            res.status(200).json({status: 200, message: 'Get projects successfully.', data: items});
+            res.status(200).json({status: 200, message: 'Get projects successfully.', payload: items});
         } catch (err) {
             res.status(500).json(err);
         }
@@ -65,7 +65,7 @@ const projectController = {
                 'district': project.district,
                 'ward': project.ward
             }
-            res.status(200).json({status: 200, message: 'Get project by id successfully.', data: data});
+            res.status(200).json({status: 200, message: 'Get project by id successfully.', payload: data});
         } catch (err) {
             res.status(500).json(err);
         }
@@ -75,7 +75,7 @@ const projectController = {
         try {
             const project = await Project.findById(req.params.id);
             const updatedProject = await project.updateOne({$set: req.body});
-            res.status(200).json({status: 200, message: 'Updated information of project successfully.', data: updatedProject});
+            res.status(200).json({status: 200, message: 'Updated information of project successfully.', payload: updatedProject});
         } catch (err) {
             res.status(500).json(err);
         }
@@ -97,7 +97,7 @@ const projectController = {
                 }
                 items.push(item);
             }); 
-            res.status(200).json({status: 200, message: 'Find list project by information applied successfully.', data: items});
+            res.status(200).json({status: 200, message: 'Find list project by information applied successfully.', payload: items});
         } catch (err) {
             res.status(500).json(err);
         }

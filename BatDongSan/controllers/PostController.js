@@ -54,7 +54,7 @@ const postController = {
                 const project = Project.findById(req.body.project);
                 await project.updateOne({$push: {posts: savedPost._id}});
             }
-            res.status(200).json({status: 200, message: 'Add post successfully.', data: null});
+            res.status(200).json({status: 200, message: 'Add post successfully.', payload: null});
         } catch (err) {
             res.status(500).json(err);
             console.log(err);
@@ -99,7 +99,7 @@ const postController = {
                 }
                 items.push(item);
             });
-            res.status(200).json({status: 200, message: 'Get posts successfully.', data: items});
+            res.status(200).json({status: 200, message: 'Get posts successfully.', payload: items});
         } catch (err) {
             res.status(500).json(err);
         }
@@ -138,7 +138,7 @@ const postController = {
                 'project': post.project,
                 'username': user.name
             }
-            res.status(200).json({status: 200, message: 'Get post by id successfully.', data: data});
+            res.status(200).json({status: 200, message: 'Get post by id successfully.', payload: data});
         } catch (err) {
             res.status(500).json(err);
         }
@@ -148,7 +148,7 @@ const postController = {
         try {
             const post = await Post.findById(req.params.id);
             await post.updateOne({$set: req.body});
-            res.status(200).json({status: 200, message: 'Updated information of post successfully.', data: null});
+            res.status(200).json({status: 200, message: 'Updated information of post successfully.', payload: null});
         } catch (err) {
             res.status(500).json(err);
         }
@@ -161,7 +161,7 @@ const postController = {
             await Project.updateMany({posts: req.params.id}, {$pull: {posts: req.params.id}});
             await Province.updateMany({posts: req.params.id}, {$pull: {posts: req.params.id}});
             await Post.findByIdAndDelete(req.params.id);
-            res.status(200).json({status: 200, message: 'Deleted post successfully.', data: null});
+            res.status(200).json({status: 200, message: 'Deleted post successfully.', payload: null});
         } catch (err) {
             res.status(500).json(err);
         }
@@ -175,7 +175,7 @@ const postController = {
             } else {
                 await post.updateOne({$set: {status: true}});
             }
-            res.status(200).json({status: 200, message: 'Updated status of post successfully.', data: null});
+            res.status(200).json({status: 200, message: 'Updated status of post successfully.', payload: null});
         } catch (err) {
             res.status(500).json(err);
         }
@@ -202,7 +202,7 @@ const postController = {
                 }
                 data.push(item);
             });
-            res.status(200).json({status: 200, message: 'Find list post by information applied successfully.', data: data});
+            res.status(200).json({status: 200, message: 'Find list post by information applied successfully.', payload: data});
         } catch (err) {
             res.status(500).json(err);
             console.log(err);

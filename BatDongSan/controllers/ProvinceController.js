@@ -27,7 +27,7 @@ const provinceController = {
             // });
             // res.status(200).json({status: 200, message: 'Get provinces successfully.', data: items});
             const provinces = pcVN.getProvinces();
-            res.status(200).json({status: 200, message: 'Get provinces successfully.', data: provinces});
+            res.status(200).json({status: 200, message: 'Get provinces successfully.', payload: provinces});
         } catch (err) {
             res.status(500).json(err);
         }
@@ -51,7 +51,7 @@ const provinceController = {
                         'name': item.name,
                         'unit': item.unit
                     }
-                    res.status(200).json({status: 200, message: 'Get province by id successfully.', data: province});
+                    res.status(200).json({status: 200, message: 'Get province by id successfully.', payload: province});
                 }
             });        
         } catch (err) {
