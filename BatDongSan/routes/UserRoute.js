@@ -5,7 +5,7 @@ const router = require('express').Router();
 
 router.post('/register', userController.register);
 
-router.post('/register/confirmotp', userController.cofirmOtp);
+router.post('/register/confirmotp', authController.verifyToken, userController.cofirmOtp);
 
 router.post('/signin', userController.signIn);
 

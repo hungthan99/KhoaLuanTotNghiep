@@ -47,11 +47,31 @@ const userController = {
                 phoneNumber: req.body.phoneNumber,
                 password: hashed
             })
+            const token = userController.generateAccessToken(newUser);
+            const refreshToken = userController.generateRefreshToken(newUser);
+            res.cookie('refreshToken', refreshToken, {
+                httpOnly: true,
+                secure: false,
+                path: '/',
+                sameSite: 'strict'
+            })
             const savedUser = await newUser.save();
+            const loadData = {
+                'id': savedUser._id,
+                'name': savedUser.name,
+                'phoneNumber': savedUser.phoneNumber,
+                'password': savedUser.password,
+                'email': savedUser.email,
+                'dateOfBirth': savedUser.dateOfBirth,
+                'gender': savedUser.gender,
+                'identityCardNumber': savedUser.identityCardNumber,
+                'likePosts': savedUser.likePosts,
+                'token': token
+            }
             await Otp.deleteMany({
                 phoneNumber: rightOtpFind.phoneNumber
             });
-            res.status(200).json({status: 200, message: 'User is registered successfully.', data: savedUser});
+            res.status(200).json({status: 200, message: 'User is registered successfully.', data: loadData});
         } else {
             return res.status(400).send({status: 400, message: 'OTP is wrong!', data: null});
         }
