@@ -5,6 +5,13 @@ const Post = require('../models/Post');
 const otpGenerator = require('otp-generator');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const dotenv = require('dotenv');
+
+dotenv.config();
+
+const accountSid = process.env.TWILIO_ACCOUNT_SID;
+const authToken = process.env.TWILIO_AUTH_TOKEN;
+const client = require('twilio')(accountSid, authToken);
 
 const userController = {
     sendOtp: async(req, res) => {
@@ -23,11 +30,20 @@ const userController = {
             });
             console.log(OTP);
             const phoneNumber = req.body.phoneNumber;
+            client.messages
+                .create({ body: 'OTP Verification is: ' + OTP, from: process.env.TWILIO_PHONE_NUMBER, to: '+84' + phoneNumber })
+                .then(data => {
+                    return res.status(200).send({status: 200, message: 'Otp sent to SMS successfully.', payload: data});
+                });
+            // client.verify.v2.services(process.env.TWILIO_SERVICE_SID).verifications
+            //     .create({ to: '+84' + phoneNumber, channel: 'sms', body: 'OTP Verification is: ' + OTP })
+            //     .then(data => {
+            //         return res.status(200).send({status: 200, message: 'Otp sent to SMS successfully.', payload: data});
+            //     });
             const otp = new Otp({phoneNumber: phoneNumber, otp: OTP});
             const salt = await bcrypt.genSalt(10);
             otp.otp = await bcrypt.hash(otp.otp, salt);
             await otp.save();
-            return res.status(200).send({status: 200, message: 'Otp sent to SMS successfully.', payload: null});
         } catch (err) {
             res.status(500).json(err);
         }
