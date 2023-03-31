@@ -33,7 +33,11 @@ const userController = {
             client.messages
                 .create({ body: 'OTP Verification is: ' + OTP, from: process.env.TWILIO_PHONE_NUMBER, to: '+84' + phoneNumber })
                 .then(data => {
-                    return res.status(200).send({status: 200, message: 'Otp sent to SMS successfully.', payload: data});
+                    try {
+                        return res.status(200).send({status: 200, message: 'Otp sent to SMS successfully.', payload: data});
+                    } catch (err) {
+                        console.log(err);
+                    }
                 });
             // client.verify.v2.services(process.env.TWILIO_SERVICE_SID).verifications
             //     .create({ to: '+84' + phoneNumber, channel: 'sms', body: 'OTP Verification is: ' + OTP })
@@ -46,6 +50,7 @@ const userController = {
             await otp.save();
         } catch (err) {
             res.status(500).json(err);
+            console.log(err);
         }
     },
 
