@@ -19,7 +19,7 @@ const userSchema = new mongoose.Schema({
         type: String
     },
     gender: {
-        type: Boolean
+        type: String
     },
     identityCardNumber: {
         type: String
