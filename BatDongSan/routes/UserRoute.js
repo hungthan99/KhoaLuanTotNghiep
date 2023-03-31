@@ -19,7 +19,7 @@ router.get('/', authController.verifyToken, userController.getUsers);
 
 router.get('/:id', authController.verifyToken, userController.getUserById);
 
-router.put('/:id', authController.verifyToken, userController.updateInfoUser);
+router.put('/update-info', authController.verifyToken, userController.updateInfoUser);
 
 router.put('/like-post/:id', authController.verifyToken, userController.likePost);
 

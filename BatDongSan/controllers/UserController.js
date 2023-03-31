@@ -250,7 +250,7 @@ const userController = {
 
     updateInfoUser: async(req, res) => {
         try {
-            const user = await User.findById(req.params.id);
+            const user = await User.findById(req.user.id);
             const updatedUser = await user.updateOne({$set: req.body});
             res.status(200).json({status: 200, message: 'Updated information of user successfully.', payload: null});
         } catch (err) {
