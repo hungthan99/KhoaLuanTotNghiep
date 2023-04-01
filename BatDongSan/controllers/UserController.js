@@ -6,6 +6,8 @@ const otpGenerator = require('otp-generator');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
+const nodemailer = require('nodemailer');
+
 const userController = {
     sendOtp: async(req, res) => {
         try {
@@ -28,6 +30,43 @@ const userController = {
             otp.otp = await bcrypt.hash(otp.otp, salt);
             await otp.save();
             return res.status(200).send({status: 200, message: 'Otp sent to SMS successfully.', payload: null});
+            
+            // const user = await User.findOne({email: req.body.email});
+            // if(user) {
+            //     return res.status(404).json({status: 404, 'message': 'Email is registered!', payload: null});
+            // }
+            // const OTP = otpGenerator.generate(6, {
+            //     digit: true,
+            //     alphabets: false,
+            //     upperCase: false,
+            //     lowerCaseAlphabets: false,
+            //     upperCaseAlphabets: false,
+            //     specialChars: false
+            // });
+            // console.log(OTP);
+            // const email = req.body.email;
+            // const testAccount = await nodemailer.createTestAccount();
+            // const transporter = nodemailer.createTransport({
+            //     host: "smtp.ethereal.email",
+            //     port: 587,
+            //     secure: false, 
+            //     auth: {
+            //       user: testAccount.user, 
+            //       pass: testAccount.pass, 
+            //     },
+            //   });
+            // const info = await transporter.sendMail({
+            //     from: 'doxir30063@duiter.com',
+            //     to: email,
+            //     subject: 'OTP Vertification',
+            //     text: 'OTP vertification is: ' + OTP,
+            //   });
+            // const otp = new Otp({email: email, otp: OTP});
+            // const salt = await bcrypt.genSalt(10);
+            // otp.otp = await bcrypt.hash(otp.otp, salt);
+            // await otp.save();
+            // return res.status(200).send({status: 200, message: 'Otp sent to email successfully.', payload: info});
+            
         } catch (err) {
             res.status(500).json(err);
         }

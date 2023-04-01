@@ -24,15 +24,27 @@ const postSchema = new mongoose.Schema({
     //     required: true,
     //     ref: 'Ward'
     // },
-    province: {
+    provinceCode: {
         type: String,
         required: true
     },
-    district: {
+    districtCode: {
         type: String,
         required: true
     },
-    ward: {
+    wardCode: {
+        type: String,
+        required: true
+    },
+    provinceName: {
+        type: String,
+        required: true
+    },
+    districtName: {
+        type: String,
+        required: true
+    },
+    wardName: {
         type: String,
         required: true
     },
