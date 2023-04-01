@@ -101,13 +101,15 @@ const postController = {
                     'districtName': post.districtName,
                     'wardName': post.wardName,
                     'project': post.project,
-                    'username': user.name
+                    'username': user.name,
+                    'createAt': post.createAt.getTime()
                 }
                 items.push(item);
             });
             res.status(200).json({status: 200, message: 'Get posts successfully.', payload: items});
         } catch (err) {
             res.status(500).json(err);
+            console.log(err);
         }
     },
 
@@ -145,7 +147,8 @@ const postController = {
                 'districtName': post.districtName,
                 'wardName': post.wardName,
                 'project': post.project,
-                'username': user.name
+                'username': user.name,
+                'createAt': post.createAt.getTime()
             }
             res.status(200).json({status: 200, message: 'Get post by id successfully.', payload: data});
         } catch (err) {
@@ -210,7 +213,8 @@ const postController = {
                     'provinceName': post.provinceName,
                     'districtName': post.districtName,
                     'wardName': post.wardName,
-                    'project': post.project
+                    'project': post.project,
+                    'createAt': post.createAt.getTime()
                 }
                 data.push(item);
             });

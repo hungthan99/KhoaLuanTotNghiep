@@ -138,7 +138,8 @@ const postSchema = new mongoose.Schema({
     contactPhoneNumber: {
         type: String,
         required: true
-    }
+    },
+    createAt: { type: Date, default: Date.now }
 })
 
 module.exports = mongoose.model('Post', postSchema);
