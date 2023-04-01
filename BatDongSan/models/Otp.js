@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const optSchema = new mongoose.Schema({
-    email: {
+    phoneNumber: {
         type: String,
         require: true
     },
