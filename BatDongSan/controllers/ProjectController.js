@@ -31,9 +31,12 @@ const projectController = {
                     'legal': project.legal,
                     'investor': project.investor,
                     'description': project.description,
-                    'province': project.province,
-                    'district': project.district,
-                    'ward': project.ward
+                    'provinceCode': project.provinceCode,
+                    'districtCode': project.districtCode,
+                    'wardCode': project.wardCode,
+                    'provinceName': project.provinceName,
+                    'districtName': project.districtName,
+                    'wardName': project.wardName
                 }
                 items.push(item);
             });
@@ -61,9 +64,12 @@ const projectController = {
                 'legal': project.legal,
                 'investor': project.investor,
                 'description': project.description,
-                'province': project.province,
-                'district': project.district,
-                'ward': project.ward
+                'provinceCode': project.provinceCode,
+                'districtCode': project.districtCode,
+                'wardCode': project.wardCode,
+                'provinceName': project.provinceName,
+                'districtName': project.districtName,
+                'wardName': project.wardName
             }
             res.status(200).json({status: 200, message: 'Get project by id successfully.', payload: data});
         } catch (err) {
@@ -91,9 +97,12 @@ const projectController = {
                     'projectType': project.projectType,
                     'price': project.price,
                     'status': project.status,
-                    'province': project.province,
-                    'district': project.district,
-                    'ward': project.ward
+                    'provinceCode': project.provinceCode,
+                    'districtCode': project.districtCode,
+                    'wardCode': project.wardCode,
+                    'provinceName': project.provinceName,
+                    'districtName': project.districtName,
+                    'wardName': project.wardName
                 }
                 items.push(item);
             }); 

@@ -31,9 +31,12 @@ const postController = {
                     images: req.body.images,
                     contactName: req.body.contactName,
                     contactPhoneNumber: req.body.contactPhoneNumber,
-                    province: req.body.province,
-                    district: req.body.district,
-                    ward: req.body.ward,
+                    provinceCode: req.body.provinceCode,
+                    districtCode: req.body.districtCode,
+                    wardCode: req.body.wardCode,
+                    provinceName: req.body.provinceName,
+                    districtName: req.body.districtName,
+                    wardName: req.body.wardName,
                     project: req.body.project,
                     user: req.user.id
             });
@@ -91,9 +94,12 @@ const postController = {
                     'contactName': post.contactName,
                     'contactNumber': post.contactPhoneNumber,
                     'status': post.status,
-                    'province': post.province,
-                    'district': post.district,
-                    'ward': post.ward,
+                    'provinceCode': post.provinceCode,
+                    'districtCode': post.districtCode,
+                    'wardCode': post.wardCode,
+                    'provinceName': post.provinceName,
+                    'districtName': post.districtName,
+                    'wardName': post.wardName,
                     'project': post.project,
                     'username': user.name
                 }
@@ -132,9 +138,12 @@ const postController = {
                 'images': post.images,
                 'contactName': post.contactName,
                 'contactNumber': post.contactNumber,
-                'province': post.province,
-                'district': post.district,
-                'ward': post.ward,
+                'provinceCode': post.provinceCode,
+                'districtCode': post.districtCode,
+                'wardCode': post.wardCode,
+                'provinceName': post.provinceName,
+                'districtName': post.districtName,
+                'wardName': post.wardName,
                 'project': post.project,
                 'username': user.name
             }
@@ -195,9 +204,12 @@ const postController = {
                     'acreage': post.acreage,
                     'bedroom': post.bedroom,
                     'houseDirection': post.houseDirection,
-                    'province': post.province,
-                    'district': post.district,
-                    'ward': post.ward,
+                    'provinceCode': post.provinceCode,
+                    'districtCode': post.districtCode,
+                    'wardCode': post.wardCode,
+                    'provinceName': post.provinceName,
+                    'districtName': post.districtName,
+                    'wardName': post.wardName,
                     'project': post.project
                 }
                 data.push(item);
