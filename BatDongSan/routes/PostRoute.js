@@ -3,11 +3,11 @@ const authController = require('../controllers/AuthController');
 
 const router = require('express').Router();
 
-router.post('/', authController.verifyToken, postController.addPost);
+router.post('/add-post', authController.verifyToken, postController.addPost);
 
-router.get('/', authController.verifyToken, postController.getPosts);
+router.get('/get-post', authController.verifyToken, postController.getPosts);
 
-router.get('/:id', authController.verifyToken, postController.getPostById);
+router.get('/get-post-by-id/:id', authController.verifyToken, postController.getPostById);
 
 router.put('/:id', authController.verifyToken, postController.updateInfoPost);
 
