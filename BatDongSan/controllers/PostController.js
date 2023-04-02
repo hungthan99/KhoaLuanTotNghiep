@@ -67,45 +67,84 @@ const postController = {
     getPosts: async(req, res) => {
         try {
             const posts = await Post.find();
-            const user = await User.findById(req.user.id);
+            // const user = await User.findById(req.user.id);
             const items = [];
-            posts.forEach((post) => {
+            // posts.forEach((post) => {
+            //     const user = await User.findById(post.user)
+            //     const item = {
+            //         'id': post._id,
+            //         'isSell': post.isSell,
+            //         'realEstateType': post.realEstateType,
+            //         'address': post.address,
+            //         'price': post.price,
+            //         'acreage': post.acreage,
+            //         'bedroom': post.bedroom,
+            //         'houseDirection': post.houseDirection,
+            //         'lat': post.lat,
+            //         'long': post.long,
+            //         'title': post.title,
+            //         'description': post.description,
+            //         'legal': post.legal,
+            //         'funiture': post.funiture,
+            //         'bathroom': post.bathroom,
+            //         'floor': post.floor,
+            //         'balconyDirection': post.balconyDirection,
+            //         'wayIn': post.wayIn,
+            //         'facade': post.facade,
+            //         'images': post.images,
+            //         'contactName': post.contactName,
+            //         'contactNumber': post.contactPhoneNumber,
+            //         'status': post.status,
+            //         'provinceCode': post.provinceCode,
+            //         'districtCode': post.districtCode,
+            //         'wardCode': post.wardCode,
+            //         'provinceName': post.provinceName,
+            //         'districtName': post.districtName,
+            //         'wardName': post.wardName,
+            //         'project': post.project,
+            //         'username': user.name,
+            //         'createAt': post.createAt.getTime()
+            //     }
+            //     items.push(item);
+            // });
+            for (const i in posts) {
+                const user = await User.findById(posts[i].user);
                 const item = {
-                    'id': post._id,
-                    'isSell': post.isSell,
-                    'realEstateType': post.realEstateType,
-                    'address': post.address,
-                    'price': post.price,
-                    'acreage': post.acreage,
-                    'bedroom': post.bedroom,
-                    'houseDirection': post.houseDirection,
-                    'lat': post.lat,
-                    'long': post.long,
-                    'title': post.title,
-                    'description': post.description,
-                    'legal': post.legal,
-                    'funiture': post.funiture,
-                    'bathroom': post.bathroom,
-                    'floor': post.floor,
-                    'balconyDirection': post.balconyDirection,
-                    'wayIn': post.wayIn,
-                    'facade': post.facade,
-                    'images': post.images,
-                    'contactName': post.contactName,
-                    'contactNumber': post.contactPhoneNumber,
-                    'status': post.status,
-                    'provinceCode': post.provinceCode,
-                    'districtCode': post.districtCode,
-                    'wardCode': post.wardCode,
-                    'provinceName': post.provinceName,
-                    'districtName': post.districtName,
-                    'wardName': post.wardName,
-                    'project': post.project,
+                    'id': posts[i]._id,
+                    'isSell': posts[i].isSell,
+                    'realEstateType': posts[i].realEstateType,
+                    'address': posts[i].address,
+                    'price': posts[i].price,
+                    'acreage': posts[i].acreage,
+                    'bedroom': posts[i].bedroom,
+                    'houseDirection': posts[i].houseDirection,
+                    'lat': posts[i].lat,
+                    'long': posts[i].long,
+                    'title': posts[i].title,
+                    'description': posts[i].description,
+                    'legal': posts[i].legal,
+                    'funiture': posts[i].funiture,
+                    'bathroom': posts[i].bathroom,
+                    'floor': posts[i].floor,
+                    'balconyDirection': posts[i].balconyDirection,
+                    'wayIn': posts[i].wayIn,
+                    'facade': posts[i].facade,
+                    'images': posts[i].images,
+                    'contactName': posts[i].contactName,
+                    'contactNumber': posts[i].contactPhoneNumber,
+                    'status': posts[i].status,
+                    'provinceCode': posts[i].provinceCode,
+                    'districtCode': posts[i].districtCode,
+                    'wardCode': posts[i].wardCode,
+                    'provinceName': posts[i].provinceName,
+                    'districtName': posts[i].districtName,
+                    'wardName': posts[i].wardName,
+                    'project': posts[i].project,
                     'username': user.name,
-                    'createAt': post.createAt.getTime()
+                    'createAt': posts[i].createAt.getTime()
                 }
                 items.push(item);
-            });
+            }
             res.status(200).json({status: 200, message: 'Get posts successfully.', payload: items});
         } catch (err) {
             res.status(500).json(err);
