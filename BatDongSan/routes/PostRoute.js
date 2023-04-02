@@ -5,7 +5,13 @@ const router = require('express').Router();
 
 router.post('/add-post', authController.verifyToken, postController.addPost);
 
-router.get('/get-post', authController.verifyToken, postController.getPosts);
+router.get('/get-all-post', authController.verifyToken, postController.getPosts);
+
+router.get('/get-post-by-user', authController.verifyToken, postController.getPostsByUser);
+
+router.get('/get-favorite-port', authController.verifyToken, postController.getPostsByLikePosts);
+
+router.get('/get-post', authController.verifyToken, postController.getPostsByIsSell);
 
 router.get('/get-post-by-id/:id', authController.verifyToken, postController.getPostById);
 

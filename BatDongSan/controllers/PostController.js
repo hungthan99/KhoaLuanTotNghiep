@@ -60,53 +60,13 @@ const postController = {
             res.status(200).json({status: 200, message: 'Add post successfully.', payload: null});
         } catch (err) {
             res.status(500).json(err);
-            console.log(err);
         }
     },
 
     getPosts: async(req, res) => {
         try {
             const posts = await Post.find();
-            // const user = await User.findById(req.user.id);
             const items = [];
-            // posts.forEach((post) => {
-            //     const user = await User.findById(post.user)
-            //     const item = {
-            //         'id': post._id,
-            //         'isSell': post.isSell,
-            //         'realEstateType': post.realEstateType,
-            //         'address': post.address,
-            //         'price': post.price,
-            //         'acreage': post.acreage,
-            //         'bedroom': post.bedroom,
-            //         'houseDirection': post.houseDirection,
-            //         'lat': post.lat,
-            //         'long': post.long,
-            //         'title': post.title,
-            //         'description': post.description,
-            //         'legal': post.legal,
-            //         'funiture': post.funiture,
-            //         'bathroom': post.bathroom,
-            //         'floor': post.floor,
-            //         'balconyDirection': post.balconyDirection,
-            //         'wayIn': post.wayIn,
-            //         'facade': post.facade,
-            //         'images': post.images,
-            //         'contactName': post.contactName,
-            //         'contactNumber': post.contactPhoneNumber,
-            //         'status': post.status,
-            //         'provinceCode': post.provinceCode,
-            //         'districtCode': post.districtCode,
-            //         'wardCode': post.wardCode,
-            //         'provinceName': post.provinceName,
-            //         'districtName': post.districtName,
-            //         'wardName': post.wardName,
-            //         'project': post.project,
-            //         'username': user.name,
-            //         'createAt': post.createAt.getTime()
-            //     }
-            //     items.push(item);
-            // });
             for (const i in posts) {
                 const user = await User.findById(posts[i].user);
                 const item = {
@@ -141,6 +101,7 @@ const postController = {
                     'wardName': posts[i].wardName,
                     'project': posts[i].project,
                     'username': user.name,
+                    'userId': req.user.id,
                     'createAt': posts[i].createAt.getTime()
                 }
                 items.push(item);
@@ -148,7 +109,118 @@ const postController = {
             res.status(200).json({status: 200, message: 'Get posts successfully.', payload: items});
         } catch (err) {
             res.status(500).json(err);
+        }
+    },
+
+    getPostsByUser: async(req, res) => {
+        try {
+            const posts = await Post.find({user: req.user.id});
+            const items = [];
+            for (const i in posts) {
+                const user = await User.findById(posts[i].user);
+                const item = {
+                    'id': posts[i]._id,
+                    'isSell': posts[i].isSell,
+                    'address': posts[i].address,
+                    'price': posts[i].price,
+                    'lat': posts[i].lat,
+                    'long': posts[i].long,
+                    'title': posts[i].title,
+                    'thumbnail': posts[i].images[0],
+                    'provinceCode': posts[i].provinceCode,
+                    'districtCode': posts[i].districtCode,
+                    'wardCode': posts[i].wardCode,
+                    'provinceName': posts[i].provinceName,
+                    'districtName': posts[i].districtName,
+                    'wardName': posts[i].wardName,
+                    'acreage': posts[i].acreage,
+                    'username': user.name,
+                    'userId': req.user.id,
+                    'createAt': posts[i].createAt.getTime()
+                }
+                items.push(item);
+            }
+            res.status(200).json({status: 200, message: 'Get posts by user successfully.', payload: items});
+        } catch (err) {
+            res.status(500).json(err);
+        }
+    },
+
+    getPostsByLikePosts: async(req, res) => {
+        try {
+            const user = await User.findById(req.user.id);
+            const likePosts = user.likePosts;
+            const posts = [];
+            for (const i in likePosts) {
+                const post = await Post.findById(likePosts[i]);
+                posts.push(post);
+            }
+            const items = [];
+            for (const i in posts) {
+                const user = await User.findById(posts[i].user);
+                const item = {
+                    'id': posts[i]._id,
+                    'isSell': posts[i].isSell,
+                    'address': posts[i].address,
+                    'price': posts[i].price,
+                    'lat': posts[i].lat,
+                    'long': posts[i].long,
+                    'title': posts[i].title,
+                    'thumbnail': posts[i].images[0],
+                    'provinceCode': posts[i].provinceCode,
+                    'districtCode': posts[i].districtCode,
+                    'wardCode': posts[i].wardCode,
+                    'provinceName': posts[i].provinceName,
+                    'districtName': posts[i].districtName,
+                    'wardName': posts[i].wardName,
+                    'acreage': posts[i].acreage,
+                    'username': user.name,
+                    'userId': req.user.id,
+                    'createAt': posts[i].createAt.getTime()
+                }
+                items.push(item);
+            }
+            res.status(200).json({status: 200, message: 'Get posts by user successfully.', payload: items});
+        } catch (err) {
+            res.status(500).json(err);
             console.log(err);
+        }
+    },
+
+    getPostsByIsSell: async(req, res) => {
+        try {
+            const posts = await Post.find();
+            const items = [];
+            const isSell = req.body.isSell;
+            for (const i in posts) {
+                const user = await User.findById(posts[i].user);
+                const item = {
+                    'id': posts[i]._id,
+                    'isSell': posts[i].isSell,
+                    'address': posts[i].address,
+                    'price': posts[i].price,
+                    'lat': posts[i].lat,
+                    'long': posts[i].long,
+                    'title': posts[i].title,
+                    'thumbnail': posts[i].images[0],
+                    'provinceCode': posts[i].provinceCode,
+                    'districtCode': posts[i].districtCode,
+                    'wardCode': posts[i].wardCode,
+                    'provinceName': posts[i].provinceName,
+                    'districtName': posts[i].districtName,
+                    'wardName': posts[i].wardName,
+                    'acreage': posts[i].acreage,
+                    'username': user.name,
+                    'userId': req.user.id,
+                    'createAt': posts[i].createAt.getTime()
+                }
+                if(item.isSell == isSell) {
+                    items.push(item);
+                }
+            }
+            res.status(200).json({status: 200, message: 'Get posts by is sell successfully.', payload: items});
+        } catch (err) {
+            res.status(500).json(err);
         }
     },
 
@@ -187,6 +259,7 @@ const postController = {
                 'wardName': post.wardName,
                 'project': post.project,
                 'username': user.name,
+                'userId': req.user.id,
                 'createAt': post.createAt.getTime()
             }
             res.status(200).json({status: 200, message: 'Get post by id successfully.', payload: data});
