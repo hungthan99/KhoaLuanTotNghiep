@@ -100,9 +100,9 @@ const postController = {
                     'districtName': posts[i].districtName,
                     'wardName': posts[i].wardName,
                     'project': posts[i].project,
-                    'username': user.name,
+                    'userName': user.name,
                     'userId': req.user.id,
-                    'createAt': posts[i].createAt.getTime()
+                    'createdAt': posts[i].createdAt.getTime()
                 }
                 items.push(item);
             }
@@ -134,9 +134,9 @@ const postController = {
                     'districtName': posts[i].districtName,
                     'wardName': posts[i].wardName,
                     'acreage': posts[i].acreage,
-                    'username': user.name,
+                    'userName': user.name,
                     'userId': req.user.id,
-                    'createAt': posts[i].createAt.getTime()
+                    'createdAt': posts[i].createdAt.getTime()
                 }
                 items.push(item);
             }
@@ -174,9 +174,9 @@ const postController = {
                     'districtName': posts[i].districtName,
                     'wardName': posts[i].wardName,
                     'acreage': posts[i].acreage,
-                    'username': user.name,
+                    'userName': user.name,
                     'userId': req.user.id,
-                    'createAt': posts[i].createAt.getTime()
+                    'createdAt': posts[i].createdAt.getTime()
                 }
                 items.push(item);
             }
@@ -210,9 +210,9 @@ const postController = {
                     'districtName': posts[i].districtName,
                     'wardName': posts[i].wardName,
                     'acreage': posts[i].acreage,
-                    'username': user.name,
+                    'userName': user.name,
                     'userId': req.user.id,
-                    'createAt': posts[i].createAt.getTime()
+                    'createdAt': posts[i].createdAt.getTime()
                 }
                 if(item.isSell == isSell) {
                     items.push(item);
@@ -258,9 +258,9 @@ const postController = {
                 'districtName': post.districtName,
                 'wardName': post.wardName,
                 'project': post.project,
-                'username': user.name,
+                'userName': user.name,
                 'userId': req.user.id,
-                'createAt': post.createAt.getTime()
+                'createdAt': post.createdAt.getTime()
             }
             res.status(200).json({status: 200, message: 'Get post by id successfully.', payload: data});
         } catch (err) {
@@ -326,7 +326,7 @@ const postController = {
                     'districtName': post.districtName,
                     'wardName': post.wardName,
                     'project': post.project,
-                    'createAt': post.createAt.getTime()
+                    'createdAt': post.createdAt.getTime()
                 }
                 data.push(item);
             });
