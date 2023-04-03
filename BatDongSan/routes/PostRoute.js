@@ -11,7 +11,7 @@ router.get('/get-post-by-user', authController.verifyToken, postController.getPo
 
 router.get('/get-favorite-port', authController.verifyToken, postController.getPostsByLikePosts);
 
-router.get('/get-post', authController.verifyToken, postController.getPostsByIsSell);
+router.post('/get-post', authController.verifyToken, postController.getPostsByIsSell);
 
 router.get('/get-post-by-id/:id', authController.verifyToken, postController.getPostById);
 
