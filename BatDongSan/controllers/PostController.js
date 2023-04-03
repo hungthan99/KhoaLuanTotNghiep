@@ -281,6 +281,7 @@ const postController = {
     deletePost: async(req, res) => {
         try {
             await User.updateMany({posts: req.params.id}, {$pull: {posts: req.params.id}});
+            await User.updateMany({likePosts: req.params.id}, {$pull: {likePosts: req.params.id}});
             await PostType.updateMany({posts: req.params.id}, {$pull: {posts: req.params.id}});
             await Project.updateMany({posts: req.params.id}, {$pull: {posts: req.params.id}});
             await Province.updateMany({posts: req.params.id}, {$pull: {posts: req.params.id}});
