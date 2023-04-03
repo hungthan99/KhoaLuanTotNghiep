@@ -299,6 +299,23 @@ const userController = {
         } catch (err) {
             res.status(500).json(err);
         }
+    },
+
+    resetPassword: async(req, res) => {
+        try {
+            const user = await User.findOne({phoneNumber: req.body.phoneNumber});
+            if(user) {
+                const salt = await bcrypt.genSalt(10);
+                const hashed = await bcrypt.hash(req.body.password, salt);
+                await user.updateOne({$set: {password: hashed}});
+                res.status(200).json({status: 200, message: 'Reset password is successfully.', payload: null});
+            } else {
+                res.status(400).json({status: 400, message: 'Phone number is not found.', payload: null});
+            }
+        } catch (err) {
+            res.status(500).json(err);
+            console.log(err);
+        }
     }
 }
 

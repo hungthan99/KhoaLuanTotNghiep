@@ -11,6 +11,8 @@ router.post('/register', userController.register);
 
 router.post('/signin', userController.signIn);
 
+router.put('/reset-password', userController.resetPassword);
+
 router.post('/refresh', userController.requestRefreshToken);
 
 router.post('/signout', authController.verifyToken, userController.signOut);
