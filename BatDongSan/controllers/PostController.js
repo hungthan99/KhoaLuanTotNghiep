@@ -209,7 +209,6 @@ const postController = {
                     'provinceName': posts[i].provinceName,
                     'districtName': posts[i].districtName,
                     'wardName': posts[i].wardName,
-                    'acreage': posts[i].acreage,
                     'userName': user.name,
                     'userId': req.user.id,
                     'createdAt': posts[i].createdAt.getTime()
@@ -310,31 +309,32 @@ const postController = {
         try {
             const posts = await Post.find(req.body);
             const data = [];
-            posts.forEach((post) => {
+            for (const i in posts) {
+                const user = await User.findById(posts[i].user);
                 const item = {
-                    'id': post._id,
-                    'isSell': post.isSell,
-                    'realEstateType': post.realEstateType,
-                    'address': post.address,
-                    'price': post.price,
-                    'acreage': post.acreage,
-                    'bedroom': post.bedroom,
-                    'houseDirection': post.houseDirection,
-                    'provinceCode': post.provinceCode,
-                    'districtCode': post.districtCode,
-                    'wardCode': post.wardCode,
-                    'provinceName': post.provinceName,
-                    'districtName': post.districtName,
-                    'wardName': post.wardName,
-                    'project': post.project,
-                    'createdAt': post.createdAt.getTime()
+                    'id': posts[i]._id,
+                    'isSell': posts[i].isSell,
+                    'address': posts[i].address,
+                    'price': posts[i].price,
+                    'lat': posts[i].lat,
+                    'long': posts[i].long,
+                    'title': posts[i].title,
+                    'thumbnail': posts[i].images[0],
+                    'provinceCode': posts[i].provinceCode,
+                    'districtCode': posts[i].districtCode,
+                    'wardCode': posts[i].wardCode,
+                    'provinceName': posts[i].provinceName,
+                    'districtName': posts[i].districtName,
+                    'wardName': posts[i].wardName,
+                    'userName': user.name,
+                    'userId': req.user.id,
+                    'createdAt': posts[i].createdAt.getTime()
                 }
                 data.push(item);
-            });
+            }
             res.status(200).json({status: 200, message: 'Find list post by information applied successfully.', payload: data});
         } catch (err) {
             res.status(500).json(err);
-            console.log(err);
         }
     }
 }
