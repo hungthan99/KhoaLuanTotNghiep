@@ -45,12 +45,13 @@ const projectSchema = new mongoose.Schema({
         required: true
     },
     price: {
-        type: String,
-        required: true
+        type: String
     },
     priceRange: {
-        type: String,
-        required: true
+        type: String
+    },
+    openForSaleTime: {
+        type: String
     },
     status: {
         type: String,
