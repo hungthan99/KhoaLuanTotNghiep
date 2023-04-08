@@ -3,7 +3,9 @@ const authController = require('../controllers/AuthController');
 
 const router = require('express').Router();
 
-router.post('/send-otp', userController.sendOtp);
+router.post('/send-otp-for-register', userController.sendOtpForRegister);
+
+router.post('/send-otp-for-reset-password', userController.sendOtpForResetPassword);
 
 router.post('/confirm-otp', userController.cofirmOtp);
 
