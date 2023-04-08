@@ -73,13 +73,13 @@ const projectSchema = new mongoose.Schema({
         required: true
     },
     apartment: {
-        type: String
+        type: Number
     },
     acreage: {
-        type: String
+        type: Number
     },
     building: {
-        type: String
+        type: Number
     },
     legal: {
         type: String
