@@ -45,6 +45,10 @@ const projectSchema = new mongoose.Schema({
         required: true
     },
     price: {
+        type: Number,
+        required: true
+    },
+    priceRange: {
         type: String,
         required: true
     },
