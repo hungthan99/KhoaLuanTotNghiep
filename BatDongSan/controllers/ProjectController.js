@@ -1,4 +1,5 @@
 const Project = require('../models/Project');
+const Post = require('../models/Post');
 
 const projectController = {
     addProject: async(req, res) => {
@@ -107,6 +108,16 @@ const projectController = {
                 items.push(item);
             }); 
             res.status(200).json({status: 200, message: 'Find list project by information applied successfully.', payload: items});
+        } catch (err) {
+            res.status(500).json(err);
+        }
+    },
+
+    deleteProject: async(req, res) => {
+        try {
+            await Post.updateMany({project: req.params.id}, {$set: {project: null}});
+            await Project.findByIdAndDelete(req.params.id);
+            res.status(200).json({status: 200, message: 'Deleted project successfully.', payload: null});
         } catch (err) {
             res.status(500).json(err);
         }

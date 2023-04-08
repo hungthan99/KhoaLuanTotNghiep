@@ -13,4 +13,6 @@ router.put('/:id', authController.verifyToken, projectController.updateInfoProje
 
 router.post('/find', authController.verifyToken, projectController.findProject);
 
+router.delete('/:id', authController.verifyToken, projectController.deleteProject);
+
 module.exports = router;
