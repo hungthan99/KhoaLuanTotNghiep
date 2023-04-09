@@ -9,7 +9,7 @@ router.get('/get-all-post', authController.verifyToken, postController.getPosts)
 
 router.get('/get-post-by-user', authController.verifyToken, postController.getPostsByUser);
 
-router.get('/get-favorite-port', authController.verifyToken, postController.getPostsByLikePosts);
+router.get('/get-favorite-post', authController.verifyToken, postController.getPostsByLikePosts);
 
 router.post('/get-post', authController.verifyToken, postController.getPostsByIsSell);
 
