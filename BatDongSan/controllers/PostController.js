@@ -207,7 +207,7 @@ const postController = {
                     'districtName': posts[i].districtName,
                     'wardName': posts[i].wardName,
                     'userName': user.name,
-                    'userId': req.user.id,
+                    'userId': user.id,
                     'createdAt': posts[i].createdAt.getTime()
                 }
                 if(item.isSell == isSell) {
