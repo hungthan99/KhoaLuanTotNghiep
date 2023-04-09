@@ -10,7 +10,7 @@ const postTypeController = {
                 const category = Category.findById(req.body.category);
                 await category.updateOne({$push: {postTypes: savedPostType._id}});
             }
-            res.status(200).json({status: 200, message: 'Add post type successfully.', payload: savedPostType});
+            res.status(200).json({status: 200, message: 'Thêm loại bài đăng thành công.', payload: savedPostType});
         } catch (err) {
             res.status(500).json(err);
         }
@@ -28,7 +28,7 @@ const postTypeController = {
                 }
                 items.push(item);
             });
-            res.status(200).json({status: 200, message: 'Get post types successfully.', payload: items});
+            res.status(200).json({status: 200, message: 'Lấy danh sách tất cả loại bài đăng thành công.', payload: items});
         } catch (err) {
             res.status(500).json(err);
         }
@@ -42,7 +42,7 @@ const postTypeController = {
                 'name': postType.name,
                 'category': postType.category
             }
-            res.status(200).json({status: 200, message: 'Get post type by id successfully.', payload: data});
+            res.status(200).json({status: 200, message: 'Lấy bài đăng theo mã thành công.', payload: data});
         } catch (err) {
             res.status(500).json(err);
         }
@@ -52,7 +52,7 @@ const postTypeController = {
         try {
             const postType = await PostType.findById(req.params.id);
             updatedPostType = await postType.updateOne({$set: req.body});
-            res.status(200).json({status: 200, message: 'Updated information of posttype successfully.', payload: updatedPostType});
+            res.status(200).json({status: 200, message: 'Cập nhật thông tin loại bài đăng thành công.', payload: updatedPostType});
         } catch (err) {
             res.status(500).json(err);
         }

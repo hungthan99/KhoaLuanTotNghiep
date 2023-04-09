@@ -5,7 +5,7 @@ const categoryController = {
         try {
             const newCategory = new Category(req.body);
             const savedCategory = await newCategory.save();
-            res.status(200).json({status: 200, message: 'Add category successfully.', payload: savedCategory});
+            res.status(200).json({status: 200, message: 'Thêm danh mục thành công.', payload: savedCategory});
         } catch (err) {
             res.status(500).json(err);
         }
@@ -22,7 +22,7 @@ const categoryController = {
                 }
                 items.push(item);
             });
-            res.status(200).json({status: 200, message: 'Get categories successfully.', payload: items});
+            res.status(200).json({status: 200, message: 'Lấy danh sách tất cả danh mục thành công.', payload: items});
         } catch (err) {
             res.status(500).json(err);
         }
@@ -35,7 +35,7 @@ const categoryController = {
                 'id': category._id,
                 'name': category.name
             }
-            res.status(200).json({status: 200, message: 'Get category by id successfully.', payload: data});
+            res.status(200).json({status: 200, message: 'Lấy danh mục theo mã thành công.', payload: data});
         } catch (err) {
             res.status(500).json(err);
         }
@@ -45,7 +45,7 @@ const categoryController = {
         try {
             const category = await Category.findById(req.params.id);
             const updatedCategory = await category.updateOne({$set: req.body});
-            res.status(200).json({status: 200, message: 'Updated information of category successfully.', payload: updatedCategory});
+            res.status(200).json({status: 200, message: 'Cập nhật thông tin danh mục thành công.', payload: updatedCategory});
         } catch (err) {
             res.status(500).json(err);
         }

@@ -35,7 +35,7 @@ const districtController = {
             // });
             // res.status(200).json({status: 200, message: 'Get districts successfully.', data: items});
             const districts = pcVN.getDistricts();
-            res.status(200).json({status: 200, message: 'Get districts successfully.', payload: districts});
+            res.status(200).json({status: 200, message: 'Lấy danh sách tất cả quận huyện thành công.', payload: districts});
         } catch (err) {
             res.status(500).json(err);
         }
@@ -61,7 +61,7 @@ const districtController = {
                         'province_name': item.province_name,
                         'full_name': item.full_name
                     }
-                    res.status(200).json({status: 200, message: 'Get province by id successfully.', payload: district});
+                    res.status(200).json({status: 200, message: 'Lấy quận huyện theo mã thành công.', payload: district});
                 }
             });       
         } catch (err) {
@@ -106,7 +106,7 @@ const districtController = {
             // });
             // res.status(200).json({status: 200, message: 'Get districts of province successfully.', data: items});
             const districts = pcVN.getDistrictsByProvinceCode(req.body.province);
-            res.status(200).json({status: 200, message: 'Get districts of province successfully.', payload: districts});
+            res.status(200).json({status: 200, message: 'Lấy danh sách quận huyện theo tỉnh thành thành công.', payload: districts});
         } catch (err) {
             res.status(500).json(err);
         }

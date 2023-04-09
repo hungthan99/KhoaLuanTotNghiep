@@ -6,7 +6,7 @@ const projectController = {
         try {
             const newProject = new Project(req.body);
             const savedProject = await newProject.save();
-            res.status(200).json({status: 200, message: 'Add project successfully.', payload: null});
+            res.status(200).json({status: 200, message: 'Thêm dự án thành công.', payload: null});
         } catch (err) {
             res.status(500).json(err);
         }
@@ -42,7 +42,7 @@ const projectController = {
                 }
                 items.push(item);
             });
-            res.status(200).json({status: 200, message: 'Get projects successfully.', payload: items});
+            res.status(200).json({status: 200, message: 'Lấy danh sách tất cả dự án thành công.', payload: items});
         } catch (err) {
             res.status(500).json(err);
         }
@@ -74,7 +74,7 @@ const projectController = {
                 'districtName': project.districtName,
                 'wardName': project.wardName
             }
-            res.status(200).json({status: 200, message: 'Get project by id successfully.', payload: data});
+            res.status(200).json({status: 200, message: 'Lấy dự án theo mã thành công.', payload: data});
         } catch (err) {
             res.status(500).json(err);
         }
@@ -84,7 +84,7 @@ const projectController = {
         try {
             const project = await Project.findById(req.params.id);
             const updatedProject = await project.updateOne({$set: req.body});
-            res.status(200).json({status: 200, message: 'Updated information of project successfully.', payload: updatedProject});
+            res.status(200).json({status: 200, message: 'Cập nhật thông tin dự án thành công.', payload: updatedProject});
         } catch (err) {
             res.status(500).json(err);
         }
@@ -110,7 +110,7 @@ const projectController = {
                 }
                 items.push(item);
             }); 
-            res.status(200).json({status: 200, message: 'Find list project by information applied successfully.', payload: items});
+            res.status(200).json({status: 200, message: 'Lọc danh sách dự án theo thông tin đã cung cấp thành công.', payload: items});
         } catch (err) {
             res.status(500).json(err);
         }
@@ -120,7 +120,7 @@ const projectController = {
         try {
             await Post.updateMany({project: req.params.id}, {$set: {project: null}});
             await Project.findByIdAndDelete(req.params.id);
-            res.status(200).json({status: 200, message: 'Deleted project successfully.', payload: null});
+            res.status(200).json({status: 200, message: 'Đã xóa dự án thành công.', payload: null});
         } catch (err) {
             res.status(500).json(err);
         }

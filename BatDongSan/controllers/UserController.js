@@ -13,7 +13,7 @@ const userController = {
         try {
             const user = await User.findOne({ phoneNumber: req.body.phoneNumber });
             if (user) {
-                return res.status(404).json({ status: 404, 'message': 'Phone number is registered!', payload: null });
+                return res.status(404).json({ status: 404, 'message': 'Số điện thoại đã được đăng ký!', payload: null });
             }
             const OTP = otpGenerator.generate(6, {
                 digit: true,
@@ -29,7 +29,7 @@ const userController = {
             const salt = await bcrypt.genSalt(10);
             otp.otp = await bcrypt.hash(otp.otp, salt);
             await otp.save();
-            return res.status(200).send({ status: 200, message: 'Otp sent to SMS for register successfully.', payload: null });
+            return res.status(200).send({ status: 200, message: 'Mã otp đã được gửi tới sms cho việc đăng ký.', payload: null });
         } catch (err) {
             res.status(500).json(err);
         }
@@ -51,7 +51,7 @@ const userController = {
             const salt = await bcrypt.genSalt(10);
             otp.otp = await bcrypt.hash(otp.otp, salt);
             await otp.save();
-            return res.status(200).send({ status: 200, message: 'Otp sent to SMS for reset password successfully.', payload: null });
+            return res.status(200).send({ status: 200, message: 'Mã otp đã được gửi tới sms cho việc đổi mật khẩu.', payload: null });
 
         } catch (err) {
             res.status(500).json(err);
@@ -64,15 +64,15 @@ const userController = {
                 phoneNumber: req.body.phoneNumber,
             })
             if (otpHolder) {
-                if (otpHolder.length === 0) return res.status(400).send({ status: 400, message: 'Phone number is wrong!', payload: null });
+                if (otpHolder.length === 0) return res.status(400).send({ status: 400, message: 'Sai số điện thoại!', payload: null });
             }
-            if (otpHolder.length === 0) return res.status(400).send({ status: 400, message: 'Otp is invalid!', payload: null });
+            if (otpHolder.length === 0) return res.status(400).send({ status: 400, message: 'Mã otp đã hết hạn!', payload: null });
             const rightOtpFind = otpHolder[otpHolder.length - 1];
             const validUser = await bcrypt.compare(req.body.otp, rightOtpFind.otp);
             if (rightOtpFind.phoneNumber && req.body.phoneNumber && validUser) {
-                res.status(200).json({ status: 200, message: 'Otp is confirmed successfully.', payload: null });
+                res.status(200).json({ status: 200, message: 'Xác thực mã otp thành công.', payload: null });
             } else {
-                return res.status(400).send({ status: 400, message: 'OTP is wrong!', payload: null });
+                return res.status(400).send({ status: 400, message: 'Sai mã otp!', payload: null });
             }
         } catch (err) {
             res.status(500).json(err);
@@ -85,9 +85,9 @@ const userController = {
                 phoneNumber: req.body.phoneNumber,
             })
             if (otpHolder) {
-                if (otpHolder.length === 0) return res.status(400).send({ status: 400, message: 'Phone number is wrong!', payload: null });
+                if (otpHolder.length === 0) return res.status(400).send({ status: 400, message: 'Sai số điện thoại!', payload: null });
             }
-            if (otpHolder.length === 0) return res.status(400).send({ status: 400, message: 'Otp is invalid!', payload: null });
+            if (otpHolder.length === 0) return res.status(400).send({ status: 400, message: 'Mã otp đã hết hạn!', payload: null });
             const rightOtpFind = otpHolder[otpHolder.length - 1];
             const validUser = await bcrypt.compare(req.body.otp, rightOtpFind.otp);
             if (rightOtpFind.phoneNumber && req.body.phoneNumber && validUser) {
@@ -121,9 +121,9 @@ const userController = {
                 await Otp.deleteMany({
                     phoneNumber: rightOtpFind.phoneNumber
                 });
-                res.status(200).json({ status: 200, message: 'User is registered successfully.', payload: loadData });
+                res.status(200).json({ status: 200, message: 'Đăng ký tài khoản thành công.', payload: loadData });
             } else {
-                return res.status(400).send({ status: 400, message: 'OTP is wrong!', payload: null });
+                return res.status(400).send({ status: 400, message: 'Sai mã otp!', payload: null });
             }
         } catch (err) {
             res.status(500).json(err);
@@ -136,9 +136,9 @@ const userController = {
                 phoneNumber: req.body.phoneNumber,
             })
             if (otpHolder) {
-                if (otpHolder.length === 0) return res.status(400).send({ status: 400, message: 'Phone number is wrong!', payload: null });
+                if (otpHolder.length === 0) return res.status(400).send({ status: 400, message: 'Sai số điện thoại!', payload: null });
             }
-            if (otpHolder.length === 0) return res.status(400).send({ status: 400, message: 'Otp is invalid!', payload: null });
+            if (otpHolder.length === 0) return res.status(400).send({ status: 400, message: 'Mã otp đã hết hạn!', payload: null });
             const rightOtpFind = otpHolder[otpHolder.length - 1];
             const validUser = await bcrypt.compare(req.body.otp, rightOtpFind.otp);
             if (rightOtpFind.phoneNumber && req.body.phoneNumber && validUser) {
@@ -147,10 +147,10 @@ const userController = {
                     const salt = await bcrypt.genSalt(10);
                     const hashed = await bcrypt.hash(req.body.password, salt);
                     await user.updateOne({ $set: { password: hashed } });
-                    res.status(200).json({ status: 200, message: 'Reset password is successfully.', payload: null });
+                    res.status(200).json({ status: 200, message: 'Đổi mật khẩu thành công.', payload: null });
                 }
             } else {
-                return res.status(400).send({ status: 400, message: 'OTP is wrong!', payload: null });
+                return res.status(400).send({ status: 400, message: 'Sai mã otp!', payload: null });
             }
         } catch (err) {
             res.status(500).json(err);
@@ -161,13 +161,13 @@ const userController = {
         try {
             const user = await User.findOne({ phoneNumber: req.body.phoneNumber });
             if (!user) {
-                return res.status(404).json({ status: 404, message: 'Phone number is wrong!', payload: null });
+                return res.status(404).json({ status: 404, message: 'Sai số điện thoại!', payload: null });
             }
             const password = await bcrypt.compare(
                 req.body.password, user.password
             )
             if (!password) {
-                return res.status(404).json({ status: 404, message: 'Password is wrong!', payload: null });
+                return res.status(404).json({ status: 404, message: 'Sai mật khẩu!', payload: null });
             }
             const token = userController.generateAccessToken(user);
             const refreshToken = userController.generateRefreshToken(user);
@@ -189,7 +189,7 @@ const userController = {
                 'likePosts': user.likePosts,
                 'token': token
             }
-            return res.status(200).json({ status: 200, message: 'Sign in is successfully.', payload: loadData });
+            return res.status(200).json({ status: 200, message: 'Đăng nhập thành công.', payload: loadData });
         } catch (err) {
             res.status(500).json(err);
         }
@@ -218,11 +218,11 @@ const userController = {
     requestRefreshToken: async (req, res) => {
         const refreshTK = req.cookies.refreshToken;
         if (!refreshTK) {
-            return res.status(401).json({ status: 401, message: 'User is not authentication!', payload: null });
+            return res.status(401).json({ status: 401, message: 'Tài khoản chưa được xác thực!', payload: null });
         }
         jwt.verify(refreshTK, process.env.JWT_REFRESH_KEY, (err, user) => {
             if (err) {
-                return res.status(403).json({ status: 403, 'message': 'RefreshToken is invalid!', payload: null });
+                return res.status(403).json({ status: 403, 'message': 'RefreshToken đã hết hạn!', payload: null });
             }
             const newAccessToken = userController.generateAccessToken(user);
             const newRefreshToken = userController.generateRefreshToken(user);
@@ -232,13 +232,13 @@ const userController = {
                 path: "/",
                 sameSite: "strict",
             });
-            return res.status(200).json({ 'statusCode': 200, 'message': 'Token is refreshed successfully.', 'newAccessToken': newAccessToken });
+            return res.status(200).json({ 'statusCode': 200, 'message': 'Token đã được làm mới thành công.', 'newAccessToken': newAccessToken });
         })
     },
 
     signOut: async (req, res) => {
         res.clearCookie('refreshToken');
-        return res.status(200).json({ status: 200, message: 'User is signed out successfully.', payload: null });
+        return res.status(200).json({ status: 200, message: 'Đăng xuất thành công.', payload: null });
     },
 
     getUsers: async (req, res) => {
@@ -259,7 +259,7 @@ const userController = {
                 }
                 items.push(item);
             });
-            return res.status(200).json({ status: 200, message: 'Get all users successfully.', payload: items });
+            return res.status(200).json({ status: 200, message: 'Lấy danh sách tất cả tài khoản thành công.', payload: items });
         } catch (err) {
             res.status(500).json(err);
         }
@@ -278,7 +278,7 @@ const userController = {
                 'gender': user.gender,
                 'identityCardNumber': user.identityCardNumber
             }
-            return res.status(200).json({ status: 200, message: 'Get user by id successfully.', payload: loadData });
+            return res.status(200).json({ status: 200, message: 'Lấy tài khoản theo mã thành công.', payload: loadData });
         } catch (err) {
             res.status(500).json(err);
         }
@@ -288,7 +288,7 @@ const userController = {
         try {
             const user = await User.findById(req.user.id);
             const updatedUser = await user.updateOne({ $set: req.body });
-            res.status(200).json({ status: 200, message: 'Updated information of user successfully.', payload: null });
+            res.status(200).json({ status: 200, message: 'Cập nhật thông tin tài khoản thành công.', payload: null });
         } catch (err) {
             res.status(500).json(err);
         }
@@ -298,7 +298,7 @@ const userController = {
         try {
             const user = await User.findById(req.user.id);
             await user.updateOne({ $push: { likePosts: req.params.id } });
-            res.status(200).json({ status: 200, message: 'Added this post on like posts successfully.', payload: null });
+            res.status(200).json({ status: 200, message: 'Đã thêm bài đăng này vào danh sách yêu thích.', payload: null });
         } catch (err) {
             res.status(500).json(err);
         }
@@ -308,7 +308,7 @@ const userController = {
         try {
             const user = await User.findById(req.user.id);
             await user.updateOne({ $pull: { likePosts: req.params.id } });
-            res.status(200).json({ status: 200, message: 'Removed this post from like posts successfully.', payload: null });
+            res.status(200).json({ status: 200, message: 'Đã xóa bài đăng này khỏi danh sách yêu thích.', payload: null });
         } catch (err) {
             res.status(500).json(err);
         }

@@ -35,7 +35,7 @@ const wardController = {
             // });
             // res.status(200).json({status: 200, message: 'Get wards successfully.', data: items});
             const wards = pcVN.getWards();
-            res.status(200).json({status: 200, message: 'Get wards successfully.', payload: wards});
+            res.status(200).json({status: 200, message: 'Lấy danh sách tất cả phường xã thành công.', payload: wards});
         } catch (err) {
             res.status(500).json(err);
         }
@@ -63,7 +63,7 @@ const wardController = {
                         'province_name': item.province_name,
                         'full_name': item.full_name
                     }
-                    res.status(200).json({status: 200, message: 'Get province by id successfully.', payload: ward});
+                    res.status(200).json({status: 200, message: 'Lấy phường xã theo mã thành công.', payload: ward});
                 }
             }); 
         } catch (err) {
@@ -108,7 +108,7 @@ const wardController = {
             // });
             // res.status(200).json({status: 200, message: 'Get wards of district successfully.', data: items});
             const wards = pcVN.getWardsByDistrictCode(req.body.district);
-            res.status(200).json({status: 200, message: 'Get wards of district successfully.', payload: wards});
+            res.status(200).json({status: 200, message: 'Lấy danh sách phường xã theo quận huyện thành công.', payload: wards});
         } catch (err) {
             res.status(500).json(err);
         }
@@ -128,7 +128,7 @@ const wardController = {
             // });
             // res.status(200).json({status: 200, message: 'Get wards of district successfully.', data: items});
             const wards = pcVN.getWardsByProvinceCode(req.body.province);
-            res.status(200).json({status: 200, message: 'Get wards of district successfully.', payload: wards});
+            res.status(200).json({status: 200, message: 'Lấy danh sách phường xã theo tỉnh thành thành công.', payload: wards});
         } catch (err) {
             res.status(500).json(err);
         }
