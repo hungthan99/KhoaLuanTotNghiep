@@ -223,7 +223,7 @@ const postController = {
     getPostById: async(req, res) => {
         try {
             const post = await Post.findById(req.params.id);
-            const user = await User.findById(req.user.id);
+            const user = await User.findById(post.user);
             const data = {
                 'id': post._id,
                 'isSell': post.isSell,
@@ -255,7 +255,7 @@ const postController = {
                 'wardName': post.wardName,
                 'project': post.project,
                 'userName': user.name,
-                'userId': req.user.id,
+                'userId': post.user,
                 'createdAt': post.createdAt.getTime()
             }
             res.status(200).json({status: 200, message: 'Lấy thông tin bài đăng theo mã thành công.', payload: data});
