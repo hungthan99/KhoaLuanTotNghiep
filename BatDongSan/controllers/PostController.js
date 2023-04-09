@@ -68,7 +68,6 @@ const postController = {
             const posts = await Post.find();
             const items = [];
             for (const i in posts) {
-                const user = await User.findById(posts[i].user);
                 const item = {
                     'id': posts[i]._id,
                     'isSell': posts[i].isSell,
@@ -100,8 +99,6 @@ const postController = {
                     'districtName': posts[i].districtName,
                     'wardName': posts[i].wardName,
                     'project': posts[i].project,
-                    'userName': user.name,
-                    'userId': req.user.id,
                     'createdAt': posts[i].createdAt.getTime()
                 }
                 items.push(item);
