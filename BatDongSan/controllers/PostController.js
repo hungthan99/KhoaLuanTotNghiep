@@ -172,7 +172,7 @@ const postController = {
                     'wardName': posts[i].wardName,
                     'acreage': posts[i].acreage,
                     'userName': user.name,
-                    'userId': req.user.id,
+                    'userId': user.id,
                     'createdAt': posts[i].createdAt.getTime()
                 }
                 items.push(item);
