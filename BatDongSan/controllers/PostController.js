@@ -16,6 +16,7 @@ const postController = {
                     acreage: req.body.acreage,
                     acreageRange: req.body.acreageRange,
                     bedroom: req.body.bedroom,
+                    bedroomRange: req.body.bedroomRange,
                     houseDirection: req.body.houseDirection,
                     lat: req.body.lat,
                     long: req.body.long,

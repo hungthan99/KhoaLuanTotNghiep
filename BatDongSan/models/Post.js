@@ -9,21 +9,6 @@ const postSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    // province: {
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     required: true,
-    //     ref: 'Province'
-    // },
-    // district: {
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     required: true,
-    //     ref: 'District'
-    // },
-    // ward: {
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     required: true,
-    //     ref: 'Ward'
-    // },
     provinceCode: {
         type: String,
         required: true
@@ -98,6 +83,9 @@ const postSchema = new mongoose.Schema({
         type: String
     },
     bedroom: {
+        type: Number
+    },
+    bedroomRange: {
         type: Number
     },
     bathroom: {
