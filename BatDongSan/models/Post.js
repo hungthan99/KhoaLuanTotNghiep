@@ -86,7 +86,7 @@ const postSchema = new mongoose.Schema({
         type: Number
     },
     bedroomRange: {
-        type: Number
+        type: String
     },
     bathroom: {
         type: Number
