@@ -1,4 +1,3 @@
-// const Province = require('../models/Province');
 const pcVN = require('pc-vn');
 
 const provinceController = {

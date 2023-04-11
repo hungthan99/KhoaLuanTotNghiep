@@ -5,8 +5,22 @@ const Post = require('../models/Post');
 const otpGenerator = require('otp-generator');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const dotenv = require('dotenv');
 
-const nodemailer = require('nodemailer');
+dotenv.config();
+
+const { Vonage } = require('@vonage/server-sdk')
+
+const vonage = new Vonage({
+  apiKey: process.env.NEXMO_KEY,
+  apiSecret: process.env.NEXMO_SECRET
+})
+
+async function sendSMS(to, from, text) {
+    await vonage.sms.send({to, from, text})
+        .then(resp => { console.log('Message sent successfully'); console.log(resp); })
+        .catch(err => { console.log('There was an error sending the messages.'); console.error(err); });
+}
 
 const userController = {
     sendOtpForRegister: async (req, res) => {
@@ -24,6 +38,7 @@ const userController = {
                 specialChars: false
             });
             console.log(OTP);
+            sendSMS('84' + req.body.phoneNumber, 'Vonage APIs', OTP);
             const phoneNumber = req.body.phoneNumber;
             const otp = new Otp({ phoneNumber: phoneNumber, otp: OTP });
             const salt = await bcrypt.genSalt(10);
@@ -46,6 +61,7 @@ const userController = {
                 specialChars: false
             });
             console.log(OTP);
+            sendSMS('84' + req.body.phoneNumber, 'Vonage APIs', OTP);
             const phoneNumber = req.body.phoneNumber;
             const otp = new Otp({ phoneNumber: phoneNumber, otp: OTP });
             const salt = await bcrypt.genSalt(10);
@@ -309,6 +325,16 @@ const userController = {
             const user = await User.findById(req.user.id);
             await user.updateOne({ $pull: { likePosts: req.params.id } });
             res.status(200).json({ status: 200, message: 'Đã xóa bài đăng này khỏi danh sách yêu thích.', payload: null });
+        } catch (err) {
+            res.status(500).json(err);
+        }
+    },
+
+    deleteUser: async (req, res) => {
+        try {
+            await Post.updateMany({user: req.params.id}, {$set: {user: null}});
+            await User.findByIdAndDelete(req.params.id);
+            res.status(200).json({ status: 200, message: 'Xoá tài khoản thành công.', payload: null });
         } catch (err) {
             res.status(500).json(err);
         }

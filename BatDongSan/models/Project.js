@@ -1,21 +1,6 @@
 const mongoose = require('mongoose');
 
 const projectSchema = new mongoose.Schema({
-    // province: {
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: 'Province',
-    //     required: true
-    // },
-    // district: {
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: 'District',
-    //     required: true
-    // },
-    // ward: {
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: 'Ward',
-    //     required: true
-    // },
     provinceCode: {
         type: String,
         required: true
@@ -77,7 +62,7 @@ const projectSchema = new mongoose.Schema({
         type: Number
     },
     acreage: {
-        type: Number
+        type: String
     },
     building: {
         type: Number

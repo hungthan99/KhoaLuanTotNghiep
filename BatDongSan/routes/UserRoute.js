@@ -29,4 +29,6 @@ router.put('/like-post/:id', authController.verifyToken, userController.likePost
 
 router.put('/dislike-post/:id', authController.verifyToken, userController.dislikePost);
 
+router.delete('/delete-user/:id', authController.verifyToken, userController.deleteUser);
+
 module.exports = router;

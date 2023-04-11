@@ -55,10 +55,6 @@ const postController = {
                 const postType = PostType.findById(req.body.postType);
                 await postType.updateOne({ $push: { posts: savedPost._id } });
             }
-            // if(newPost.province) {
-            //     const province = Province.findById(req.body.province);
-            //     await province.updateOne({$push: {posts: savedPost._id}});
-            // }
             if (newPost.project) {
                 const project = Project.findById(req.body.project);
                 await project.updateOne({ $push: { posts: savedPost._id } });
