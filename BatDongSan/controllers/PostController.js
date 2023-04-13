@@ -495,6 +495,7 @@ const postController = {
                         'long': posts[i].long,
                         'title': posts[i].title,
                         'thumbnail': posts[i].images[0],
+                        'acreage': posts[i].acreage,
                         'provinceCode': posts[i].provinceCode,
                         'districtCode': posts[i].districtCode,
                         'wardCode': posts[i].wardCode,

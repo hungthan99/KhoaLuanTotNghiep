@@ -12,12 +12,12 @@ dotenv.config();
 const { Vonage } = require('@vonage/server-sdk')
 
 const vonage = new Vonage({
-  apiKey: process.env.NEXMO_KEY,
-  apiSecret: process.env.NEXMO_SECRET
+    apiKey: process.env.NEXMO_KEY,
+    apiSecret: process.env.NEXMO_SECRET
 })
 
 async function sendSMS(to, from, text) {
-    await vonage.sms.send({to, from, text})
+    await vonage.sms.send({ to, from, text })
         .then(resp => { console.log('Message sent successfully'); console.log(resp); })
         .catch(err => { console.log('There was an error sending the messages.'); console.error(err); });
 }
@@ -332,7 +332,7 @@ const userController = {
 
     deleteUser: async (req, res) => {
         try {
-            await Post.updateMany({user: req.params.id}, {$set: {user: null}});
+            await Post.updateMany({ user: req.params.id }, { $set: { user: null } });
             await User.findByIdAndDelete(req.params.id);
             res.status(200).json({ status: 200, message: 'Xoá tài khoản thành công.', payload: null });
         } catch (err) {
