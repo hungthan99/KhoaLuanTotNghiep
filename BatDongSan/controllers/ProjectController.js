@@ -47,7 +47,8 @@ const projectController = {
                         'wardCode': project.wardCode,
                         'provinceName': project.provinceName,
                         'districtName': project.districtName,
-                        'wardName': project.wardName
+                        'wardName': project.wardName,
+                        'posts': project.posts
                     }
                     items.push(item);
                 });
@@ -77,7 +78,8 @@ const projectController = {
                         'wardCode': project.wardCode,
                         'provinceName': project.provinceName,
                         'districtName': project.districtName,
-                        'wardName': project.wardName
+                        'wardName': project.wardName,
+                        'posts': project.posts
                     }
                     items.push(item);
                 });
@@ -112,7 +114,8 @@ const projectController = {
                 'wardCode': project.wardCode,
                 'provinceName': project.provinceName,
                 'districtName': project.districtName,
-                'wardName': project.wardName
+                'wardName': project.wardName,
+                'posts': project.posts
             }
             res.status(200).json({ status: 200, message: 'Lấy dự án theo mã thành công.', payload: data });
         } catch (err) {
@@ -132,25 +135,72 @@ const projectController = {
 
     findProject: async (req, res) => {
         try {
-            const projects = await Project.find(req.body);
-            const items = [];
-            projects.forEach((project) => {
-                const item = {
-                    'id': project._id,
-                    'projectType': project.projectType,
-                    'price': project.price,
-                    'openForSaleTime': project.openForSaleTime,
-                    'status': project.status,
-                    'provinceCode': project.provinceCode,
-                    'districtCode': project.districtCode,
-                    'wardCode': project.wardCode,
-                    'provinceName': project.provinceName,
-                    'districtName': project.districtName,
-                    'wardName': project.wardName
-                }
-                items.push(item);
-            });
-            res.status(200).json({ status: 200, message: 'Lọc danh sách dự án theo thông tin đã cung cấp thành công.', payload: items });
+            let page = req.query.page;
+            if (page) {
+                page = parseInt(page);
+                let skip = (page - 1) * limit;
+                const projects = await Project.find(req.body).skip(skip).limit(limit);
+                const items = [];
+                projects.forEach((project) => {
+                    const item = {
+                        'id': project._id,
+                        'projectType': project.projectType,
+                        'price': project.price,
+                        'openForSaleTime': project.openForSaleTime,
+                        'status': project.status,
+                        'acreage': project.acreage,
+                        'lat': project.lat,
+                        'long': project.long,
+                        'name': project.name,
+                        'images': project.images,
+                        'apartment': project.apartment,
+                        'building': project.building,
+                        'legal': project.legal,
+                        'investor': project.investor,
+                        'description': project.description,
+                        'provinceCode': project.provinceCode,
+                        'districtCode': project.districtCode,
+                        'wardCode': project.wardCode,
+                        'provinceName': project.provinceName,
+                        'districtName': project.districtName,
+                        'wardName': project.wardName,
+                        'posts': project.posts
+                    }
+                    items.push(item);
+                });
+                res.status(200).json({ status: 200, message: 'Lọc danh sách dự án theo thông tin đã cung cấp thành công.', payload: items });
+            } else {
+                const projects = await Project.find(req.body);
+                const items = [];
+                projects.forEach((project) => {
+                    const item = {
+                        'id': project._id,
+                        'projectType': project.projectType,
+                        'price': project.price,
+                        'openForSaleTime': project.openForSaleTime,
+                        'status': project.status,
+                        'acreage': project.acreage,
+                        'lat': project.lat,
+                        'long': project.long,
+                        'name': project.name,
+                        'images': project.images,
+                        'apartment': project.apartment,
+                        'building': project.building,
+                        'legal': project.legal,
+                        'investor': project.investor,
+                        'description': project.description,
+                        'provinceCode': project.provinceCode,
+                        'districtCode': project.districtCode,
+                        'wardCode': project.wardCode,
+                        'provinceName': project.provinceName,
+                        'districtName': project.districtName,
+                        'wardName': project.wardName,
+                        'posts': project.posts
+                    }
+                    items.push(item);
+                });
+                res.status(200).json({ status: 200, message: 'Lọc danh sách dự án theo thông tin đã cung cấp thành công.', payload: items });
+            }
         } catch (err) {
             res.status(500).json(err);
         }
