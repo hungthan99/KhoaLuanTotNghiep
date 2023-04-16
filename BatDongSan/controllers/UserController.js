@@ -52,6 +52,10 @@ const userController = {
 
     sendOtpForResetPassword: async (req, res) => {
         try {
+            const user = await User.findOne({ phoneNumber: req.body.phoneNumber });
+            if (!user) {
+                return res.status(404).json({ status: 404, 'message': 'Số điện thoại chưa được đăng ký!', payload: null });
+            }
             const OTP = otpGenerator.generate(6, {
                 digit: true,
                 alphabets: false,
