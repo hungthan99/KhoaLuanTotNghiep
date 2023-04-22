@@ -398,6 +398,7 @@ const postController = {
                 'districtName': post.districtName,
                 'wardName': post.wardName,
                 'project': post.project,
+                'projectName': post.project.name,
                 'userName': user.name,
                 'userId': post.user,
                 'createdAt': post.createdAt.getTime()
