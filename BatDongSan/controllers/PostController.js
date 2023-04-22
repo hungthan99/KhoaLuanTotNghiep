@@ -368,6 +368,7 @@ const postController = {
         try {
             const post = await Post.findById(req.params.id);
             const user = await User.findById(post.user);
+            const project = await Project.findById(post.project);
             const data = {
                 'id': post._id,
                 'isSell': post.isSell,
@@ -398,7 +399,7 @@ const postController = {
                 'districtName': post.districtName,
                 'wardName': post.wardName,
                 'project': post.project,
-                'projectName': post.project.name,
+                'projectName': project.name,
                 'userName': user.name,
                 'userId': post.user,
                 'createdAt': post.createdAt.getTime()
