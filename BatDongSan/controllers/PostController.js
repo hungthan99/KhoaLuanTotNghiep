@@ -1,8 +1,7 @@
 const Post = require('../models/Post');
 const User = require('../models/User');
-const PostType = require('../models/PostType');
-const Province = require('../models/Province');
 const Project = require('../models/Project');
+
 const dotenv = require('dotenv');
 
 dotenv.config();
@@ -50,10 +49,6 @@ const postController = {
             if (newPost.user) {
                 const user = User.findById(req.body.user);
                 await user.updateOne({ $push: { posts: savedPost._id } });
-            }
-            if (newPost.postType) {
-                const postType = PostType.findById(req.body.postType);
-                await postType.updateOne({ $push: { posts: savedPost._id } });
             }
             if (newPost.project) {
                 const project = Project.findById(req.body.project);
@@ -162,7 +157,7 @@ const postController = {
             if (page) {
                 page = parseInt(page);
                 let skip = (page - 1) * limit;
-                const posts = await Post.find({ user: req.user.id }).skip(skip).limit(limit);
+                const posts = await Post.find({ user: req.params.id }).skip(skip).limit(limit);
                 const items = [];
                 for (const i in posts) {
                     const user = await User.findById(posts[i].user);
@@ -183,14 +178,14 @@ const postController = {
                         'wardName': posts[i].wardName,
                         'acreage': posts[i].acreage,
                         'userName': user.name,
-                        'userId': req.user.id,
+                        'userId': posts[i].user,
                         'createdAt': posts[i].createdAt.getTime()
                     }
                     items.push(item);
                 }
                 res.status(200).json({ status: 200, message: 'Lấy danh sách bài đăng theo tài khoản thành công.', payload: items });
             } else {
-                const posts = await Post.find({ user: req.user.id });
+                const posts = await Post.find({ user: req.params.id });
                 const items = [];
                 for (const i in posts) {
                     const user = await User.findById(posts[i].user);
@@ -211,7 +206,7 @@ const postController = {
                         'wardName': posts[i].wardName,
                         'acreage': posts[i].acreage,
                         'userName': user.name,
-                        'userId': req.user.id,
+                        'userId': posts[i].user,
                         'createdAt': posts[i].createdAt.getTime()
                     }
                     items.push(item);
@@ -427,9 +422,7 @@ const postController = {
         try {
             await User.updateMany({ posts: req.params.id }, { $pull: { posts: req.params.id } });
             await User.updateMany({ likePosts: req.params.id }, { $pull: { likePosts: req.params.id } });
-            await PostType.updateMany({ posts: req.params.id }, { $pull: { posts: req.params.id } });
             await Project.updateMany({ posts: req.params.id }, { $pull: { posts: req.params.id } });
-            await Province.updateMany({ posts: req.params.id }, { $pull: { posts: req.params.id } });
             await Post.findByIdAndDelete(req.params.id);
             res.status(200).json({ status: 200, message: 'Đã xóa bài đăng thành công.', payload: null });
         } catch (err) {

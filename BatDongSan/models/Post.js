@@ -40,10 +40,6 @@ const postSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Project'
     },
-    postType: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'PostType'
-    },
     lat: {
         type: Number,
         required: true,
@@ -118,6 +114,10 @@ const postSchema = new mongoose.Schema({
         type: Boolean,
         required: true,
         default: true
+    },
+    browseStatus: {
+        type: Number,
+        default: 0
     },
     contactName: {
         type: String,

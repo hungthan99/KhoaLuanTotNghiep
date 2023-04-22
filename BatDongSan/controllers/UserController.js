@@ -38,8 +38,8 @@ const userController = {
                 specialChars: false
             });
             console.log(OTP);
-            sendSMS('84' + req.body.phoneNumber, 'Vonage APIs', OTP);
             const phoneNumber = req.body.phoneNumber;
+            sendSMS('84' + phoneNumber, 'Vonage APIs', OTP);
             const otp = new Otp({ phoneNumber: phoneNumber, otp: OTP });
             const salt = await bcrypt.genSalt(10);
             otp.otp = await bcrypt.hash(otp.otp, salt);
@@ -65,8 +65,8 @@ const userController = {
                 specialChars: false
             });
             console.log(OTP);
-            sendSMS('84' + req.body.phoneNumber, 'Vonage APIs', OTP);
             const phoneNumber = req.body.phoneNumber;
+            sendSMS('84' + phoneNumber, 'Vonage APIs', OTP);
             const otp = new Otp({ phoneNumber: phoneNumber, otp: OTP });
             const salt = await bcrypt.genSalt(10);
             otp.otp = await bcrypt.hash(otp.otp, salt);
@@ -307,7 +307,7 @@ const userController = {
     updateInfoUser: async (req, res) => {
         try {
             const user = await User.findById(req.user.id);
-            const updatedUser = await user.updateOne({ $set: req.body });
+            await user.updateOne({ $set: req.body });
             res.status(200).json({ status: 200, message: 'Cập nhật thông tin tài khoản thành công.', payload: null });
         } catch (err) {
             res.status(500).json(err);

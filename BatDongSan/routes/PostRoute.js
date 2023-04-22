@@ -7,7 +7,7 @@ router.post('/add-post', authController.verifyToken, postController.addPost);
 
 router.get('/get-all-post', authController.verifyToken, postController.getPosts);
 
-router.get('/get-post-by-user', authController.verifyToken, postController.getPostsByUser);
+router.get('/get-post-by-user/:id', authController.verifyToken, postController.getPostsByUser);
 
 router.get('/get-favorite-post', authController.verifyToken, postController.getPostsByLikePosts);
 
