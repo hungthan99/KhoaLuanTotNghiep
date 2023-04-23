@@ -24,6 +24,10 @@ const userSchema = new mongoose.Schema({
     identityCardNumber: {
         type: String
     },
+    isAdmin: {
+        type: Boolean,
+        default: false
+    },
     posts: [
         {
             type: mongoose.Schema.Types.ObjectId,

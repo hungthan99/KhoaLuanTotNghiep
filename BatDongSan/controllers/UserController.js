@@ -23,45 +23,51 @@ async function sendSMS(to, from, text) {
 }
 
 // const admin = require('firebase-admin');
-// const serviceAccount = require('./path/to/serviceAccountKey.json');
-
-// admin.initializeApp({
-//   credential: admin.credential.cert(serviceAccount),
-// });
-
-// async function sendVerificationCode(phoneNumber) {
-//   try {
-//     const auth = admin.auth();
-
-//     const verificationCode = Math.floor(100000 + Math.random() * 900000);
-
-//     const message = `Your verification code is ${verificationCode}`;
-
-//     const result = await auth
-//       .createUser({ phoneNumber })
-//       .then((userRecord) =>
-//         admin.auth().setCustomUserClaims(userRecord.uid, {
-//           verificationCode,
-//         })
-//       )
-//       .then(() =>
-//         admin.messaging().send({
-//           notification: { title: 'Verification Code', body: message },
-//           token: phoneNumber,
-//         })
-//       );
-
-//     console.log('Verification code sent successfully:', result);
-//     return verificationCode;
-//   } catch (error) {
-//     console.error('Error sending verification code:', error);
-//     return null;
-//   }
+// const serviceAccount =
+// {
+//     "type": "service_account",
+//     "project_id": "realestateproject-fcad6",
+//     "private_key_id": "a90e7153b98cbfdf56f622df67b5b9012a042512",
+//     "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQDSeGzradNG2wcM\ni6CdPfQ5xFLmVBKwxma7xTi0xOEqKiZSLCsQenJtEcfbu1Rmhml3hJrggkDQFGZc\nuPb1GyGMSUeyM8p3MZOYdrD7GrWgUoKpq5Bb/0Pp6gDLf4aGI5C8IhquQVa4ByZC\n2CcRwwtwuyY1KDgeweuzZY2mOzPLjLQP4LBgL3e91TEZJqlDoW/YaWz9JNTe3l0+\ngAtm6gXPMf/n3MVy1fZ6t136GZcFD62Nr4Rrk6rJJEJ0W2wAZFvYdX0MaY0ZquDt\ncJ/G0hz+cn6NVX3jgxKVETMIpaK4r4iKYfArs44vQO18HtpwmYxtJ81YZMxD1jge\niBexhvoXAgMBAAECggEAD3Vb3qCLrYkZx/Cbb+EkhnemdRdYthYkZocyRoitVwj4\nfpGS6idsLxmeucNVDCC0L1yUeYfnlcDh0c6eCNugx6p8Mxj9tmp0Qj75eb/49hkJ\nUsfwluk1RkFzJH8t1L1Y/JBusDzJT0PrKf6xQ+s09Gcyg7X8BTpOAwOi90Ii6EC/\nplTzq5tAsPhCSsyex0QevGFcxt6O2mmekx0Lqx/VjlOfCZBahqdJLCoEK0U8+muy\nOMVbOqErsQyuMQiSWeucaukljT7mCtBxdx5TQtumTuyjldaX0Ig2sD0l7sCb+Xzo\nOSAt55g74nMCji/lZk5+ZJpsbHtwmZH8RL9lKUczkQKBgQD7Tl3dVZ35v9sqG/FI\n+FkHvRiNW/SBt7wGSNasL2953LG736O5ngdYSkvJ6dh4AeweWqP4aBDrIbBM/MgJ\nqfE4CG7v10DgTn6sQ8MB+r9mShtv1/04GGl4LPOBTS9avqhbmxhTjWPdeV9si4g5\nDTff20B+DDjtr031Omwj3N7fJwKBgQDWZsz9L7HWsNYWdmRwjDnBIuOtz4wU4FJJ\nF8XIni0nm4lC010uBy6ftSFXvOTOuRI9kGewErM1ZCfd3mR7cNuFiV4YE38HszAF\nI8yaMpActPsnySVyinQjAv7rGKNDNiiXHUUkiqA8+Q68d/GR7XPFxhz4gbVD69r/\nSDgJ0B3jkQKBgQCdx+8g9w9PbgixYIfWU666MBxJLHHQO8Z+f57gzouEDG8+0MPf\n13svEL6S0BJMDpDr4ebPIK92oVkqjQ8fGibMEmdsiE5ARqg7ifPWu1MOavrc9tQS\nMymM/VQJW6eeptPXaAIW+0+3Duw9n0Fw6H6rOuI8AXqAqK8eh4a74YHAwwKBgQCA\neF0AoWGoyZGfKBYLMpsw1Z0j+ydvIvNrhOkoy083WoWnG0vMVtVjMX/nOPLJxC/f\n3/WhlbL4nSkeUzJWnUuM+sD9IEGP9Zkim07wXrfn27JbJrZfqgLpL9RcPwklLwCn\nfAyAVuipYHuqBx0jWetzaMDXT7G0H1G8giPCDYi7YQKBgQDIslJh9d2CULXl03hg\nPfv53GSdi6KaxphqweWl8Pom9slezxHOW+x7ZR2Qy8DApv6pZiDN+RcyNr3dQaBj\n7D3VYSxugAap6+w0GlvXM6UQHuZnQh2Y5lgZOdhBYhXFZC9KF6raTCUGkP+fDCgR\n0tNflO1vNLFd9NVvNKEGyVTMuw==\n-----END PRIVATE KEY-----\n",
+//     "client_email": "firebase-adminsdk-ahgnj@realestateproject-fcad6.iam.gserviceaccount.com",
+//     "client_id": "102822154399897053632",
+//     "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+//     "token_uri": "https://oauth2.googleapis.com/token",
+//     "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+//     "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-ahgnj%40realestateproject-fcad6.iam.gserviceaccount.com"
 // }
 
-// sendVerificationCode('+1234567890')
-//   .then((verificationCode) => console.log('Verification code:', verificationCode))
-//   .catch((error) => console.error(error));
+// admin.initializeApp({
+//     credential: admin.credential.cert(serviceAccount),
+// });
+
+// async function sendVerificationCode(phoneNumber, verificationCode) {
+//     try {
+//         const auth = admin.auth();
+
+//         const message = `Your verification code is ${verificationCode}`;
+
+//         const result = await auth
+//             .createUser({ phoneNumber })
+//             .then((userRecord) =>
+//                 admin.auth().setCustomUserClaims(userRecord.uid, {
+//                     verificationCode,
+//                 })
+//             )
+//             .then(() =>
+//                 admin.messaging().send({
+//                     notification: { title: 'Verification Code', body: message },
+//                     token: phoneNumber,
+//                 })
+//             );
+
+//         console.log('Verification code sent successfully:', result);
+//         return verificationCode;
+//     } catch (error) {
+//         console.error('Error sending verification code:', error);
+//         return null;
+//     }
+// }
 
 const userController = {
     sendOtpForRegister: async (req, res) => {
@@ -81,6 +87,9 @@ const userController = {
             console.log(OTP);
             const phoneNumber = req.body.phoneNumber;
             sendSMS('84' + phoneNumber, 'Vonage APIs', OTP);
+            // sendVerificationCode(phoneNumber, OTP)
+            //     .then((verificationCode) => console.log('Verification code:', verificationCode))
+            //     .catch((error) => console.error(error));
             const otp = new Otp({ phoneNumber: phoneNumber, otp: OTP });
             const salt = await bcrypt.genSalt(10);
             otp.otp = await bcrypt.hash(otp.otp, salt);
@@ -108,6 +117,9 @@ const userController = {
             console.log(OTP);
             const phoneNumber = req.body.phoneNumber;
             sendSMS('84' + phoneNumber, 'Vonage APIs', OTP);
+            // sendVerificationCode(phoneNumber, OTP)
+            //     .then((verificationCode) => console.log('Verification code:', verificationCode))
+            //     .catch((error) => console.error(error));
             const otp = new Otp({ phoneNumber: phoneNumber, otp: OTP });
             const salt = await bcrypt.genSalt(10);
             otp.otp = await bcrypt.hash(otp.otp, salt);
@@ -220,7 +232,7 @@ const userController = {
 
     signIn: async (req, res) => {
         try {
-            const user = await User.findOne({ phoneNumber: req.body.phoneNumber });
+            const user = await User.findOne({ phoneNumber: req.body.phoneNumber, isAdmin: false });
             if (!user) {
                 return res.status(404).json({ status: 404, message: 'Sai số điện thoại!', payload: null });
             }
