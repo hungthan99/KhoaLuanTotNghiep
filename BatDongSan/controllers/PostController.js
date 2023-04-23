@@ -154,62 +154,126 @@ const postController = {
     getPostsByUser: async (req, res) => {
         try {
             let page = req.query.page;
+            const userSignIn = await User.findById(req.user);
+            const userSearch = await User.findById(req.params.id);
             if (page) {
                 page = parseInt(page);
                 let skip = (page - 1) * limit;
                 const posts = await Post.find({ user: req.params.id }).skip(skip).limit(limit);
-                const items = [];
-                for (const i in posts) {
-                    const user = await User.findById(posts[i].user);
-                    const item = {
-                        'id': posts[i]._id,
-                        'isSell': posts[i].isSell,
-                        'address': posts[i].address,
-                        'price': posts[i].price,
-                        'lat': posts[i].lat,
-                        'long': posts[i].long,
-                        'title': posts[i].title,
-                        'thumbnail': posts[i].images[0],
-                        'provinceCode': posts[i].provinceCode,
-                        'districtCode': posts[i].districtCode,
-                        'wardCode': posts[i].wardCode,
-                        'provinceName': posts[i].provinceName,
-                        'districtName': posts[i].districtName,
-                        'wardName': posts[i].wardName,
-                        'acreage': posts[i].acreage,
-                        'userName': user.name,
-                        'userId': posts[i].user,
-                        'createdAt': posts[i].createdAt.getTime()
+                let items = [];
+                if(userSignIn == userSearch) {
+                    for (const i in posts) {
+                        const user = await User.findById(posts[i].user);
+                        if(posts[i].status == 0 || posts[i].status == 1) {
+                            const item = {
+                                'id': posts[i]._id,
+                                'isSell': posts[i].isSell,
+                                'address': posts[i].address,
+                                'price': posts[i].price,
+                                'lat': posts[i].lat,
+                                'long': posts[i].long,
+                                'title': posts[i].title,
+                                'thumbnail': posts[i].images[0],
+                                'provinceCode': posts[i].provinceCode,
+                                'districtCode': posts[i].districtCode,
+                                'wardCode': posts[i].wardCode,
+                                'provinceName': posts[i].provinceName,
+                                'districtName': posts[i].districtName,
+                                'wardName': posts[i].wardName,
+                                'acreage': posts[i].acreage,
+                                'userName': user.name,
+                                'userId': posts[i].user,
+                                'createdAt': posts[i].createdAt.getTime()
+                            }
+                            items.push(item);
+                        }
                     }
-                    items.push(item);
+                } else {
+                    for (const i in posts) {
+                        const user = await User.findById(posts[i].user);
+                        if(posts[i].status == 0) {
+                            const item = {
+                                'id': posts[i]._id,
+                                'isSell': posts[i].isSell,
+                                'address': posts[i].address,
+                                'price': posts[i].price,
+                                'lat': posts[i].lat,
+                                'long': posts[i].long,
+                                'title': posts[i].title,
+                                'thumbnail': posts[i].images[0],
+                                'provinceCode': posts[i].provinceCode,
+                                'districtCode': posts[i].districtCode,
+                                'wardCode': posts[i].wardCode,
+                                'provinceName': posts[i].provinceName,
+                                'districtName': posts[i].districtName,
+                                'wardName': posts[i].wardName,
+                                'acreage': posts[i].acreage,
+                                'userName': user.name,
+                                'userId': posts[i].user,
+                                'createdAt': posts[i].createdAt.getTime()
+                            }
+                            items.push(item);
+                        }
+                    }
                 }
                 res.status(200).json({ status: 200, message: 'Lấy danh sách bài đăng theo tài khoản thành công.', payload: items });
             } else {
                 const posts = await Post.find({ user: req.params.id });
-                const items = [];
-                for (const i in posts) {
-                    const user = await User.findById(posts[i].user);
-                    const item = {
-                        'id': posts[i]._id,
-                        'isSell': posts[i].isSell,
-                        'address': posts[i].address,
-                        'price': posts[i].price,
-                        'lat': posts[i].lat,
-                        'long': posts[i].long,
-                        'title': posts[i].title,
-                        'thumbnail': posts[i].images[0],
-                        'provinceCode': posts[i].provinceCode,
-                        'districtCode': posts[i].districtCode,
-                        'wardCode': posts[i].wardCode,
-                        'provinceName': posts[i].provinceName,
-                        'districtName': posts[i].districtName,
-                        'wardName': posts[i].wardName,
-                        'acreage': posts[i].acreage,
-                        'userName': user.name,
-                        'userId': posts[i].user,
-                        'createdAt': posts[i].createdAt.getTime()
+                let items = [];
+                if(userSignIn == userSearch) {
+                    for (const i in posts) {
+                        const user = await User.findById(posts[i].user);
+                        if(posts[i].status == 0 || posts[i].status == 1) {
+                            const item = {
+                                'id': posts[i]._id,
+                                'isSell': posts[i].isSell,
+                                'address': posts[i].address,
+                                'price': posts[i].price,
+                                'lat': posts[i].lat,
+                                'long': posts[i].long,
+                                'title': posts[i].title,
+                                'thumbnail': posts[i].images[0],
+                                'provinceCode': posts[i].provinceCode,
+                                'districtCode': posts[i].districtCode,
+                                'wardCode': posts[i].wardCode,
+                                'provinceName': posts[i].provinceName,
+                                'districtName': posts[i].districtName,
+                                'wardName': posts[i].wardName,
+                                'acreage': posts[i].acreage,
+                                'userName': user.name,
+                                'userId': posts[i].user,
+                                'createdAt': posts[i].createdAt.getTime()
+                            }
+                            items.push(item);
+                        }
                     }
-                    items.push(item);
+                } else {
+                    for (const i in posts) {
+                        const user = await User.findById(posts[i].user);
+                        if(posts[i].status == 0) {
+                            const item = {
+                                'id': posts[i]._id,
+                                'isSell': posts[i].isSell,
+                                'address': posts[i].address,
+                                'price': posts[i].price,
+                                'lat': posts[i].lat,
+                                'long': posts[i].long,
+                                'title': posts[i].title,
+                                'thumbnail': posts[i].images[0],
+                                'provinceCode': posts[i].provinceCode,
+                                'districtCode': posts[i].districtCode,
+                                'wardCode': posts[i].wardCode,
+                                'provinceName': posts[i].provinceName,
+                                'districtName': posts[i].districtName,
+                                'wardName': posts[i].wardName,
+                                'acreage': posts[i].acreage,
+                                'userName': user.name,
+                                'userId': posts[i].user,
+                                'createdAt': posts[i].createdAt.getTime()
+                            }
+                            items.push(item);
+                        }
+                    }
                 }
                 res.status(200).json({ status: 200, message: 'Lấy danh sách bài đăng theo tài khoản thành công.', payload: items });
             }
