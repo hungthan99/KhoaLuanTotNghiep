@@ -111,9 +111,8 @@ const postSchema = new mongoose.Schema({
         ref: 'User'
     },
     status: {
-        type: Boolean,
-        required: true,
-        default: true
+        type: Number,
+        default: 0
     },
     browseStatus: {
         type: Number,

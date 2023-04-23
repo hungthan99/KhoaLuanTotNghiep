@@ -469,19 +469,19 @@ const postController = {
         }
     },
 
-    updatePostStatus: async (req, res) => {
-        try {
-            const post = await Post.findById(req.params.id);
-            if (post.status == true) {
-                await post.updateOne({ $set: { status: false } });
-            } else {
-                await post.updateOne({ $set: { status: true } });
-            }
-            res.status(200).json({ status: 200, message: 'Cập nhật trạng thái bài đăng thành công.', payload: null });
-        } catch (err) {
-            res.status(500).json(err);
-        }
-    },
+    // updatePostStatus: async (req, res) => {
+    //     try {
+    //         const post = await Post.findById(req.params.id);
+    //         if (post.status == true) {
+    //             await post.updateOne({ $set: { status: false } });
+    //         } else {
+    //             await post.updateOne({ $set: { status: true } });
+    //         }
+    //         res.status(200).json({ status: 200, message: 'Cập nhật trạng thái bài đăng thành công.', payload: null });
+    //     } catch (err) {
+    //         res.status(500).json(err);
+    //     }
+    // },
 
     findPost: async (req, res) => {
         try {

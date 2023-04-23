@@ -22,6 +22,47 @@ async function sendSMS(to, from, text) {
         .catch(err => { console.log('There was an error sending the messages.'); console.error(err); });
 }
 
+// const admin = require('firebase-admin');
+// const serviceAccount = require('./path/to/serviceAccountKey.json');
+
+// admin.initializeApp({
+//   credential: admin.credential.cert(serviceAccount),
+// });
+
+// async function sendVerificationCode(phoneNumber) {
+//   try {
+//     const auth = admin.auth();
+
+//     const verificationCode = Math.floor(100000 + Math.random() * 900000);
+
+//     const message = `Your verification code is ${verificationCode}`;
+
+//     const result = await auth
+//       .createUser({ phoneNumber })
+//       .then((userRecord) =>
+//         admin.auth().setCustomUserClaims(userRecord.uid, {
+//           verificationCode,
+//         })
+//       )
+//       .then(() =>
+//         admin.messaging().send({
+//           notification: { title: 'Verification Code', body: message },
+//           token: phoneNumber,
+//         })
+//       );
+
+//     console.log('Verification code sent successfully:', result);
+//     return verificationCode;
+//   } catch (error) {
+//     console.error('Error sending verification code:', error);
+//     return null;
+//   }
+// }
+
+// sendVerificationCode('+1234567890')
+//   .then((verificationCode) => console.log('Verification code:', verificationCode))
+//   .catch((error) => console.error(error));
+
 const userController = {
     sendOtpForRegister: async (req, res) => {
         try {

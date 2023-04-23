@@ -19,7 +19,7 @@ router.put('/:id', authController.verifyToken, postController.updateInfoPost);
 
 router.delete('/:id', authController.verifyToken, postController.deletePost);
 
-router.put('/update-status/:id', authController.verifyToken, postController.updatePostStatus);
+// router.put('/update-status/:id', authController.verifyToken, postController.updatePostStatus);
 
 router.post('/find', authController.verifyToken, postController.findPost);
 
