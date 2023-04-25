@@ -66,7 +66,7 @@ const postController = {
             if (page) {
                 page = parseInt(page);
                 let skip = (page - 1) * limit;
-                const posts = await Post.find().skip(skip).limit(limit);
+                const posts = await Post.find().sort({createdAt: -1}).skip(skip).limit(limit);
                 const items = [];
                 for (const i in posts) {
                     const item = {
@@ -100,13 +100,14 @@ const postController = {
                         'districtName': posts[i].districtName,
                         'wardName': posts[i].wardName,
                         'project': posts[i].project,
+                        'user': posts[i].user,
                         'createdAt': posts[i].createdAt.getTime()
                     }
                     items.push(item);
                 }
                 res.status(200).json({ status: 200, message: 'Lấy danh sách tất cả bài đăng thành công.', payload: items });
             } else {
-                const posts = await Post.find();
+                const posts = await Post.find().sort({createdAt: -1});
                 const items = [];
                 for (const i in posts) {
                     const item = {
@@ -140,6 +141,7 @@ const postController = {
                         'districtName': posts[i].districtName,
                         'wardName': posts[i].wardName,
                         'project': posts[i].project,
+                        'user': posts[i].user,
                         'createdAt': posts[i].createdAt.getTime()
                     }
                     items.push(item);
@@ -161,7 +163,7 @@ const postController = {
                 let skip = (page - 1) * limit;
                 let items = [];
                 if(userSignIn == userSearch) {
-                    const posts = await Post.find({ user: req.params.id, $or: [{status: 0}, {status: 1}]}).skip(skip).limit(limit);
+                    const posts = await Post.find({ user: req.params.id, $or: [{status: 0}, {status: 1}]}).sort({createdAt: -1}).skip(skip).limit(limit);
                     for (const i in posts) {
                         const user = await User.findById(posts[i].user);
                         const item = {
@@ -187,7 +189,7 @@ const postController = {
                         items.push(item);
                     }
                 } else {
-                    const posts = await Post.find({ user: req.params.id, status: 0 }).skip(skip).limit(limit);
+                    const posts = await Post.find({ user: req.params.id, status: 0 }).sort({createdAt: -1}).skip(skip).limit(limit);
                     for (const i in posts) {
                         const user = await User.findById(posts[i].user);
                         const item = {
@@ -217,7 +219,7 @@ const postController = {
             } else {
                 let items = [];
                 if(userSignIn == userSearch) {
-                    const posts = await Post.find({ user: req.params.id, $or: [{status: 0}, {status: 1}] });
+                    const posts = await Post.find({ user: req.params.id, $or: [{status: 0}, {status: 1}] }).sort({createdAt: -1});
                     for (const i in posts) {
                         const user = await User.findById(posts[i].user);
                         const item = {
@@ -243,7 +245,7 @@ const postController = {
                         items.push(item);
                     }
                 } else {
-                    const posts = await Post.find({ user: req.params.id, status: 0 });
+                    const posts = await Post.find({ user: req.params.id, status: 0 }).sort({createdAt: -1});
                     for (const i in posts) {
                         const user = await User.findById(posts[i].user);
                         const item = {
@@ -292,7 +294,9 @@ const postController = {
                 }
                 const items = [];
                 if (skip > 0) from = from + skip;
-                const lsPost = posts.slice(skip, from);
+                const lsPost = posts.slice(skip, from).sort((a, b) => {
+                    return a.createdAt.getTime() - b.createdAt.getTime();
+                });
                 for (const i in lsPost) {
                     const user = await User.findById(lsPost[i].user);
                     const item = {
@@ -323,6 +327,9 @@ const postController = {
                     const post = await Post.findById(likePosts[i]);
                     posts.push(post);
                 }
+                posts.sort((a, b) => {
+                    return a.createdAt.getTime(), b.createdAt.getTime();
+                })
                 const items = [];
                 for (const i in posts) {
                     const user = await User.findById(posts[i].user);
@@ -351,6 +358,7 @@ const postController = {
                 res.status(200).json({ status: 200, message: 'Lấy danh sách bài đăng trong danh sách yêu thích thành công.', payload: items });
             }
         } catch (err) {
+            console.log("---> err", err);
             res.status(500).json(err);
         }
     },
@@ -363,7 +371,7 @@ const postController = {
             if (page) {
                 page = parseInt(page);
                 let skip = (page - 1) * limit;
-                const posts = await Post.find({ isSell: isSell }).skip(skip).limit(limit);
+                const posts = await Post.find({ isSell: isSell }).sort({createdAt: -1}).skip(skip).limit(limit);
                 for (const i in posts) {
                     const user = await User.findById(posts[i].user);
                     const item = {
@@ -390,7 +398,7 @@ const postController = {
                 }
                 res.status(200).json({ status: 200, message: 'Lấy danh sách bài đăng theo trạng thái đã bán hay chưa thành công.', payload: items });
             } else {
-                const posts = await Post.find({ isSell: isSell })
+                const posts = await Post.find({ isSell: isSell }).sort({createdAt: -1});
                 for (const i in posts) {
                     const user = await User.findById(posts[i].user);
                     const item = {
@@ -547,7 +555,7 @@ const postController = {
             if (page) {
                 page = parseInt(page);
                 let skip = (page - 1) * limit;
-                const posts = await Post.find(req.body).skip(skip).limit(limit);
+                const posts = await Post.find(req.body).sort({createdAt: -1}).skip(skip).limit(limit);
                 const data = [];
                 for (const i in posts) {
                     const user = await User.findById(posts[i].user);
@@ -575,7 +583,7 @@ const postController = {
                 }
                 res.status(200).json({ status: 200, message: 'Lọc danh sách bài đăng theo thông tin đã được cung cấp thành công.', payload: data });
             } else {
-                const posts = await Post.find(req.body);
+                const posts = await Post.find(req.body).sort({createdAt: -1});
                 const data = [];
                 for (const i in posts) {
                     const user = await User.findById(posts[i].user);
