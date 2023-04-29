@@ -100,7 +100,7 @@ const postController = {
                         'districtName': posts[i].districtName,
                         'wardName': posts[i].wardName,
                         'project': posts[i].project,
-                        'user': posts[i].user,
+                        'userId': posts[i].user,
                         'createdAt': posts[i].createdAt.getTime()
                     }
                     items.push(item);
@@ -141,7 +141,7 @@ const postController = {
                         'districtName': posts[i].districtName,
                         'wardName': posts[i].wardName,
                         'project': posts[i].project,
-                        'user': posts[i].user,
+                        'userId': posts[i].user,
                         'createdAt': posts[i].createdAt.getTime()
                     }
                     items.push(item);
