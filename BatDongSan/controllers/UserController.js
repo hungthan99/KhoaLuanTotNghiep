@@ -232,37 +232,41 @@ const userController = {
 
     signIn: async (req, res) => {
         try {
-            const user = await User.findOne({ phoneNumber: req.body.phoneNumber, isAdmin: false });
+            const user = await User.findOne({ phoneNumber: req.body.phoneNumber });
             if (!user) {
                 return res.status(404).json({ status: 404, message: 'Sai số điện thoại!', payload: null });
             }
-            const password = await bcrypt.compare(
-                req.body.password, user.password
-            )
-            if (!password) {
-                return res.status(404).json({ status: 404, message: 'Sai mật khẩu!', payload: null });
+            if(user.isAdmin == req.body.isAdmin) {
+                const password = await bcrypt.compare(
+                    req.body.password, user.password
+                )
+                if (!password) {
+                    return res.status(404).json({ status: 404, message: 'Sai mật khẩu!', payload: null });
+                }
+                const token = userController.generateAccessToken(user);
+                const refreshToken = userController.generateRefreshToken(user);
+                res.cookie('refreshToken', refreshToken, {
+                    httpOnly: true,
+                    secure: false,
+                    path: '/',
+                    sameSite: 'strict'
+                })
+                const loadData = {
+                    'id': user._id,
+                    'name': user.name,
+                    'phoneNumber': user.phoneNumber,
+                    'password': user.password,
+                    'email': user.email,
+                    'dateOfBirth': user.dateOfBirth,
+                    'gender': user.gender,
+                    'identityCardNumber': user.identityCardNumber,
+                    'likePosts': user.likePosts,
+                    'token': token
+                }
+                return res.status(200).json({ status: 200, message: 'Đăng nhập thành công.', payload: loadData });
+            } else {
+                return res.status(404).json({ status: 404, message: 'Đăng nhập thất bại.', payload: null });
             }
-            const token = userController.generateAccessToken(user);
-            const refreshToken = userController.generateRefreshToken(user);
-            res.cookie('refreshToken', refreshToken, {
-                httpOnly: true,
-                secure: false,
-                path: '/',
-                sameSite: 'strict'
-            })
-            const loadData = {
-                'id': user._id,
-                'name': user.name,
-                'phoneNumber': user.phoneNumber,
-                'password': user.password,
-                'email': user.email,
-                'dateOfBirth': user.dateOfBirth,
-                'gender': user.gender,
-                'identityCardNumber': user.identityCardNumber,
-                'likePosts': user.likePosts,
-                'token': token
-            }
-            return res.status(200).json({ status: 200, message: 'Đăng nhập thành công.', payload: loadData });
         } catch (err) {
             res.status(500).json(err);
         }
