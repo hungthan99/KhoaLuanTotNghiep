@@ -1,6 +1,7 @@
 const User = require('../models/User');
 const Otp = require('../models/Otp');
 const Post = require('../models/Post');
+const Project = require('../models/Project');
 
 const otpGenerator = require('otp-generator');
 const jwt = require('jsonwebtoken');
@@ -9,7 +10,7 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
-const { Vonage } = require('@vonage/server-sdk')
+const { Vonage } = require('@vonage/server-sdk');
 
 const vonage = new Vonage({
     apiKey: process.env.NEXMO_KEY,
@@ -393,7 +394,8 @@ const userController = {
 
     deleteUser: async (req, res) => {
         try {
-            await Post.updateMany({ user: req.params.id }, { $set: { user: null } });
+            const posts = await Post.deleteMany({ user: req.params.id });
+            await Project.updateMany({ posts: posts.id }, { $pull: { posts: posts.id } });
             await User.findByIdAndDelete(req.params.id);
             res.status(200).json({ status: 200, message: 'Xoá tài khoản thành công.', payload: null });
         } catch (err) {
