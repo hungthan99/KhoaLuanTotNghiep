@@ -237,6 +237,9 @@ const userController = {
             if (!user) {
                 return res.status(404).json({ status: 404, message: 'Sai số điện thoại!', payload: null });
             }
+            if(user.isActive == false) {
+                return res.status(404).json({ status: 404, message: 'Tài khoản đã bị khóa!', payload: null });
+            }
             if(user.isAdmin == req.body.isAdmin) {
                 const password = await bcrypt.compare(
                     req.body.password, user.password
