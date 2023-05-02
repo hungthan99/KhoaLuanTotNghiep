@@ -7,12 +7,14 @@ router.post('/', authController.verifyToken, projectController.addProject);
 
 router.get('/', authController.verifyToken, projectController.getProjects);
 
-router.get('/:id', authController.verifyToken, projectController.getProjectById);
+router.get('/get-project-by-id/:id', authController.verifyToken, projectController.getProjectById);
 
 router.put('/:id', authController.verifyToken, projectController.updateInfoProject);
 
 router.post('/find', authController.verifyToken, projectController.findProject);
 
 router.delete('/:id', authController.verifyToken, projectController.deleteProject);
+
+router.get('/search-by-keyword', authController.verifyToken, projectController.searchByKeyword);
 
 module.exports = router;
