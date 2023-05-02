@@ -156,14 +156,13 @@ const postController = {
     getPostsByUser: async (req, res) => {
         try {
             let page = req.query.page;
-            const userSignIn = await User.findById(req.user.id);
-            const userSearch = await User.findById(req.params.id);
             if (page) {
                 page = parseInt(page);
                 let skip = (page - 1) * limit;
                 let items = [];
-                if(userSignIn == userSearch) {
-                    const posts = await Post.find({ user: req.params.id, $or: [{status: 0}, {status: 1}]}).sort({createdAt: -1}).skip(skip).limit(limit);
+                if(req.user.id == req.params.id) {
+                    console.log('Bằng nhau')
+                    const posts = await Post.find({ user: req.params.id , $or: [{status: 0}, {status: 1}] } ).sort({createdAt: -1}).skip(skip).limit(limit);
                     for (const i in posts) {
                         const user = await User.findById(posts[i].user);
                         const item = {
@@ -222,8 +221,9 @@ const postController = {
                 res.status(200).json({ status: 200, message: 'Lấy danh sách bài đăng theo tài khoản thành công.', payload: items });
             } else {
                 let items = [];
-                if(userSignIn == userSearch) {
-                    const posts = await Post.find({ user: req.params.id, $or: [{status: 0}, {status: 1}] }).sort({createdAt: -1});
+                if(req.user.id == req.params.id) {
+                    console.log('Bằng nhau')
+                    const posts = await Post.find({ user: req.params.id, $or: [ {status: 0}, {status: 1} ] }).sort({createdAt: -1});
                     for (const i in posts) {
                         const user = await User.findById(posts[i].user);
                         const item = {
@@ -544,20 +544,6 @@ const postController = {
             res.status(500).json(err);
         }
     },
-
-    // updatePostStatus: async (req, res) => {
-    //     try {
-    //         const post = await Post.findById(req.params.id);
-    //         if (post.status == true) {
-    //             await post.updateOne({ $set: { status: false } });
-    //         } else {
-    //             await post.updateOne({ $set: { status: true } });
-    //         }
-    //         res.status(200).json({ status: 200, message: 'Cập nhật trạng thái bài đăng thành công.', payload: null });
-    //     } catch (err) {
-    //         res.status(500).json(err);
-    //     }
-    // },
 
     findPost: async (req, res) => {
         try {
