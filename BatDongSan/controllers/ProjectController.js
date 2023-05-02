@@ -216,13 +216,19 @@ const projectController = {
         }
     },
 
-    searchByKeyword: async(req, res) => {
+    searchByKeyword: async (req, res) => {
         try {
             let page = req.query.page;
             if (page) {
                 page = parseInt(page);
                 let skip = (page - 1) * limit;
-                const projects = await Project.find({ $text: { $search: req.body.keyword } }).skip(skip).limit(limit);
+                const search = req.body.keyword + '';
+                const regex = new RegExp(`${search}`, 'i');
+                const projects = await Project.find({
+                    $or: [ 
+                        { name: { $regex: regex } }
+                    ]
+                }).skip(skip).limit(limit);
                 const items = [];
                 projects.forEach((project) => {
                     const item = {
@@ -253,7 +259,13 @@ const projectController = {
                 });
                 res.status(200).json({ status: 200, message: 'Lọc danh sách dự án theo thông tin đã cung cấp thành công.', payload: items });
             } else {
-                const projects = await Project.find({ $text: { $search: req.body.keyword } });
+                const search = req.body.keyword + '';
+                const regex = new RegExp(`${search}`, 'i');
+                const projects = await Project.find({
+                    $or: [ 
+                        { name: { $regex: regex } }
+                    ]
+                });
                 const items = [];
                 projects.forEach((project) => {
                     const item = {

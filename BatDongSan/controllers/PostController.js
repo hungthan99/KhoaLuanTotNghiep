@@ -632,7 +632,13 @@ const postController = {
             if(page) {
                 page = parseInt(page);
                 let skip = (page - 1) * limit;
-                const posts = await Post.find({ $text: { $search: req.body.keyword } }).skip(skip).limit(limit);
+                const search = req.body.keyword + '';
+                const regex = new RegExp(`${search}`, 'i');
+                const posts = await Post.find({
+                    $or: [ 
+                        { address: {$regex: regex} }
+                    ]
+                }).skip(skip).limit(limit);
                 const data = [];
                 for (const i in posts) {
                     const user = await User.findById(posts[i].user);
@@ -660,7 +666,13 @@ const postController = {
                 }
                 res.status(200).json({ status: 200, message: 'Lọc danh sách bài đăng theo thông tin đã được cung cấp thành công.', payload: data });
             } else {
-                const posts = await Post.find({ $text: { $search: req.body.keyword } });
+                const search = req.body.keyword + '';
+                const regex = new RegExp(`${search}`, 'i');
+                const posts = await Post.find({
+                    $or: [ 
+                        { address: {$regex: regex} }
+                    ]
+                });
                 const data = [];
                 for (const i in posts) {
                     const user = await User.findById(posts[i].user);
