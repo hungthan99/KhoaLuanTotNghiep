@@ -342,6 +342,7 @@ const userController = {
                         'dateOfBirth': user.dateOfBirth,
                         'gender': user.gender,
                         'identityCardNumber': user.identityCardNumber,
+                        'isActive': user.isActive,
                         'likePosts': user.likePosts
                     }
                     items.push(item);
@@ -360,6 +361,7 @@ const userController = {
                         'dateOfBirth': user.dateOfBirth,
                         'gender': user.gender,
                         'identityCardNumber': user.identityCardNumber,
+                        'isActive': user.isActive,
                         'likePosts': user.likePosts
                     }
                     items.push(item);
