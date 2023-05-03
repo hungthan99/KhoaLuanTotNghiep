@@ -10,6 +10,8 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
+const limit = process.env.PAGE_SIZE_FOR_USER;
+
 const { Vonage } = require('@vonage/server-sdk');
 
 const vonage = new Vonage({
@@ -237,10 +239,10 @@ const userController = {
             if (!user) {
                 return res.status(404).json({ status: 404, message: 'Sai số điện thoại!', payload: null });
             }
-            if(user.isActive == false) {
+            if (user.isActive == false) {
                 return res.status(404).json({ status: 404, message: 'Tài khoản đã bị khóa!', payload: null });
             }
-            if(user.isAdmin == req.body.isAdmin) {
+            if (user.isAdmin == req.body.isAdmin) {
                 const password = await bcrypt.compare(
                     req.body.password, user.password
                 )
@@ -324,23 +326,46 @@ const userController = {
 
     getUsers: async (req, res) => {
         try {
-            const users = await User.find();
-            const items = [];
-            users.forEach((user) => {
-                const item = {
-                    'id': user._id,
-                    'name': user.name,
-                    'phoneNumber': user.phoneNumber,
-                    'password': user.password,
-                    'email': user.email,
-                    'dateOfBirth': user.dateOfBirth,
-                    'gender': user.gender,
-                    'identityCardNumber': user.identityCardNumber,
-                    'likePosts': user.likePosts
-                }
-                items.push(item);
-            });
-            return res.status(200).json({ status: 200, message: 'Lấy danh sách tất cả tài khoản thành công.', payload: items });
+            let page = req.query.page;
+            if (page) {
+                page = parseInt(page);
+                let skip = (page - 1) * limit;
+                const users = await User.find().skip(skip).limit(limit);
+                const items = [];
+                users.forEach((user) => {
+                    const item = {
+                        'id': user._id,
+                        'name': user.name,
+                        'phoneNumber': user.phoneNumber,
+                        'password': user.password,
+                        'email': user.email,
+                        'dateOfBirth': user.dateOfBirth,
+                        'gender': user.gender,
+                        'identityCardNumber': user.identityCardNumber,
+                        'likePosts': user.likePosts
+                    }
+                    items.push(item);
+                });
+                return res.status(200).json({ status: 200, message: 'Lấy danh sách tất cả tài khoản thành công.', payload: items });
+            } else {
+                const users = await User.find();
+                const items = [];
+                users.forEach((user) => {
+                    const item = {
+                        'id': user._id,
+                        'name': user.name,
+                        'phoneNumber': user.phoneNumber,
+                        'password': user.password,
+                        'email': user.email,
+                        'dateOfBirth': user.dateOfBirth,
+                        'gender': user.gender,
+                        'identityCardNumber': user.identityCardNumber,
+                        'likePosts': user.likePosts
+                    }
+                    items.push(item);
+                });
+                return res.status(200).json({ status: 200, message: 'Lấy danh sách tất cả tài khoản thành công.', payload: items });
+            }
         } catch (err) {
             res.status(500).json(err);
         }
