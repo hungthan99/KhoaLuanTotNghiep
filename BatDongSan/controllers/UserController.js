@@ -330,7 +330,7 @@ const userController = {
             if (page) {
                 page = parseInt(page);
                 let skip = (page - 1) * limit;
-                const users = await User.find().skip(skip).limit(limit);
+                const users = await User.find({ isAdmin: false }).skip(skip).limit(limit);
                 const items = [];
                 users.forEach((user) => {
                     const item = {
@@ -348,7 +348,7 @@ const userController = {
                 });
                 return res.status(200).json({ status: 200, message: 'Lấy danh sách tất cả tài khoản thành công.', payload: items });
             } else {
-                const users = await User.find();
+                const users = await User.find({ isAdmin: false });
                 const items = [];
                 users.forEach((user) => {
                     const item = {
