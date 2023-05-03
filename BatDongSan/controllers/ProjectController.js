@@ -129,8 +129,8 @@ const projectController = {
     updateInfoProject: async (req, res) => {
         try {
             const project = await Project.findById(req.params.id);
-            const updatedProject = await project.updateOne({ $set: req.body });
-            res.status(200).json({ status: 200, message: 'Cập nhật thông tin dự án thành công.', payload: updatedProject });
+            await project.updateOne({ $set: req.body });
+            res.status(200).json({ status: 200, message: 'Cập nhật thông tin dự án thành công.', payload: null });
         } catch (err) {
             res.status(500).json(err);
         }
