@@ -25,6 +25,8 @@ router.get('/:id', authController.verifyToken, userController.getUserById);
 
 router.put('/update-info', authController.verifyToken, userController.updateInfoUser);
 
+router.put('/change-active-status/:id', authController.verifyToken, userController.changeStatusActiveUser);
+
 router.put('/like-post/:id', authController.verifyToken, userController.likePost);
 
 router.put('/dislike-post/:id', authController.verifyToken, userController.dislikePost);

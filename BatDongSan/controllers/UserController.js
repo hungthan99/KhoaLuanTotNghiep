@@ -400,6 +400,25 @@ const userController = {
         }
     },
 
+    changeStatusActiveUser: async (req, res) => {
+        try {
+            const user = await User.findById(req.params.id);
+            if(user) {
+                if (user.isActive) {
+                    await user.updateOne({ $set: { isActive: false } })
+                    res.status(200).json({status: 200, message: 'Khóa tài khoản người dùng thành công', payload: null})
+                } else {
+                    await user.updateOne({ $set: { isActive: true } })
+                    res.status(200).json({status: 200, message: 'Mở khóa tài khoản người dùng thành công', payload: null})
+                }
+            } else {
+                res.status(404).json({status: 404, message: 'Tài khoản không tồn tại', payload: null})
+            }
+        } catch (err) {
+            res.status(500).json(err);
+        }
+    },
+
     likePost: async (req, res) => {
         try {
             const user = await User.findById(req.user.id);
