@@ -29,7 +29,10 @@ const projectSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    price: {
+    minPrice: {
+        type: String
+    },
+    maxPrice: {
         type: String
     },
     priceRange: {

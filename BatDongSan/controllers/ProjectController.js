@@ -29,7 +29,8 @@ const projectController = {
                     const item = {
                         'id': project._id,
                         'projectType': project.projectType,
-                        'price': project.price,
+                        'minPrice': project.minPrice,
+                        'maxPrice': project.maxPrice,
                         'openForSaleTime': project.openForSaleTime,
                         'status': project.status,
                         'lat': project.lat,
@@ -60,7 +61,8 @@ const projectController = {
                     const item = {
                         'id': project._id,
                         'projectType': project.projectType,
-                        'price': project.price,
+                        'minPrice': project.minPrice,
+                        'maxPrice': project.maxPrice,
                         'openForSaleTime': project.openForSaleTime,
                         'status': project.status,
                         'lat': project.lat,
@@ -96,7 +98,8 @@ const projectController = {
             const data = {
                 'id': project._id,
                 'projectType': project.projectType,
-                'price': project.price,
+                'minPrice': project.minPrice,
+                'maxPrice': project.maxPrice,
                 'openForSaleTime': project.openForSaleTime,
                 'status': project.status,
                 'lat': project.lat,
@@ -145,7 +148,8 @@ const projectController = {
                     const item = {
                         'id': project._id,
                         'projectType': project.projectType,
-                        'price': project.price,
+                        'minPrice': project.minPrice,
+                        'maxPrice': project.maxPrice,
                         'openForSaleTime': project.openForSaleTime,
                         'status': project.status,
                         'acreage': project.acreage,
@@ -176,7 +180,8 @@ const projectController = {
                     const item = {
                         'id': project._id,
                         'projectType': project.projectType,
-                        'price': project.price,
+                        'minPrice': project.minPrice,
+                        'maxPrice': project.maxPrice,
                         'openForSaleTime': project.openForSaleTime,
                         'status': project.status,
                         'acreage': project.acreage,
@@ -225,7 +230,7 @@ const projectController = {
                 const search = req.body.keyword + '';
                 const regex = new RegExp(`${search}`, 'i');
                 const projects = await Project.find({
-                    $or: [ 
+                    $or: [
                         { name: { $regex: regex } }
                     ]
                 }).skip(skip).limit(limit);
@@ -234,7 +239,8 @@ const projectController = {
                     const item = {
                         'id': project._id,
                         'projectType': project.projectType,
-                        'price': project.price,
+                        'minPrice': project.minPrice,
+                        'maxPrice': project.maxPrice,
                         'openForSaleTime': project.openForSaleTime,
                         'status': project.status,
                         'acreage': project.acreage,
@@ -262,7 +268,7 @@ const projectController = {
                 const search = req.body.keyword + '';
                 const regex = new RegExp(`${search}`, 'i');
                 const projects = await Project.find({
-                    $or: [ 
+                    $or: [
                         { name: { $regex: regex } }
                     ]
                 });
@@ -271,7 +277,8 @@ const projectController = {
                     const item = {
                         'id': project._id,
                         'projectType': project.projectType,
-                        'price': project.price,
+                        'minPrice': project.minPrice,
+                        'maxPrice': project.maxPrice,
                         'openForSaleTime': project.openForSaleTime,
                         'status': project.status,
                         'acreage': project.acreage,
