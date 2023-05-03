@@ -161,8 +161,7 @@ const postController = {
                 let skip = (page - 1) * limit;
                 let items = [];
                 if(req.user.id == req.params.id) {
-                    console.log('Bằng nhau')
-                    const posts = await Post.find({ user: req.params.id , $or: [{status: 0}, {status: 1}] } ).sort({createdAt: -1}).skip(skip).limit(limit);
+                    const posts = await Post.find({ user: req.params.id , browseStatus: 1, $or: [{status: 0}, {status: 1}] } ).sort({createdAt: -1}).skip(skip).limit(limit);
                     for (const i in posts) {
                         const user = await User.findById(posts[i].user);
                         const item = {
@@ -190,7 +189,7 @@ const postController = {
                         items.push(item);
                     }
                 } else {
-                    const posts = await Post.find({ user: req.params.id, status: 0 }).sort({createdAt: -1}).skip(skip).limit(limit);
+                    const posts = await Post.find({ user: req.params.id, browseStatus: 1, status: 0 }).sort({createdAt: -1}).skip(skip).limit(limit);
                     for (const i in posts) {
                         const user = await User.findById(posts[i].user);
                         const item = {
@@ -222,8 +221,7 @@ const postController = {
             } else {
                 let items = [];
                 if(req.user.id == req.params.id) {
-                    console.log('Bằng nhau')
-                    const posts = await Post.find({ user: req.params.id, $or: [ {status: 0}, {status: 1} ] }).sort({createdAt: -1});
+                    const posts = await Post.find({ user: req.params.id, browseStatus: 1, $or: [ {status: 0}, {status: 1} ] }).sort({createdAt: -1});
                     for (const i in posts) {
                         const user = await User.findById(posts[i].user);
                         const item = {
@@ -251,7 +249,7 @@ const postController = {
                         items.push(item);
                     }
                 } else {
-                    const posts = await Post.find({ user: req.params.id, status: 0 }).sort({createdAt: -1});
+                    const posts = await Post.find({ user: req.params.id, browseStatus: 1, status: 0 }).sort({createdAt: -1});
                     for (const i in posts) {
                         const user = await User.findById(posts[i].user);
                         const item = {
@@ -278,6 +276,77 @@ const postController = {
                         }
                         items.push(item);
                     }
+                }
+                res.status(200).json({ status: 200, message: 'Lấy danh sách bài đăng theo tài khoản thành công.', payload: items });
+            }
+        } catch (err) {
+            res.status(500).json(err);
+        }
+    },
+
+    getPostByUserForAdmin: async (req, res) => {
+        try {
+            let page = req.query.page;
+            if(page) {
+                page = parseInt(page);
+                let skip = (page - 1) * limit;
+                let items = [];
+                const posts = await Post.findById(req.params.id).skip(skip).limit(limit);
+                for (const i in posts) {
+                    const user = await User.findById(posts[i].user);
+                    const item = {
+                        'id': posts[i]._id,
+                        'isSell': posts[i].isSell,
+                        'address': posts[i].address,
+                        'price': posts[i].price,
+                        'lat': posts[i].lat,
+                        'long': posts[i].long,
+                        'title': posts[i].title,
+                        'thumbnail': posts[i].images[0],
+                        'status': posts[i].status,
+                        'browseStatus': posts[i].browseStatus,
+                        'provinceCode': posts[i].provinceCode,
+                        'districtCode': posts[i].districtCode,
+                        'wardCode': posts[i].wardCode,
+                        'provinceName': posts[i].provinceName,
+                        'districtName': posts[i].districtName,
+                        'wardName': posts[i].wardName,
+                        'acreage': posts[i].acreage,
+                        'userName': user.name,
+                        'userId': posts[i].user,
+                        'createdAt': posts[i].createdAt.getTime()
+                    }
+                    items.push(item);
+                }
+                res.status(200).json({ status: 200, message: 'Lấy danh sách bài đăng theo tài khoản thành công.', payload: items });
+            } else {
+                let items = [];
+                const posts = await Post.findById(req.params.id);
+                for (const i in posts) {
+                    const user = await User.findById(posts[i].user);
+                    const item = {
+                        'id': posts[i]._id,
+                        'isSell': posts[i].isSell,
+                        'address': posts[i].address,
+                        'price': posts[i].price,
+                        'lat': posts[i].lat,
+                        'long': posts[i].long,
+                        'title': posts[i].title,
+                        'thumbnail': posts[i].images[0],
+                        'status': posts[i].status,
+                        'browseStatus': posts[i].browseStatus,
+                        'provinceCode': posts[i].provinceCode,
+                        'districtCode': posts[i].districtCode,
+                        'wardCode': posts[i].wardCode,
+                        'provinceName': posts[i].provinceName,
+                        'districtName': posts[i].districtName,
+                        'wardName': posts[i].wardName,
+                        'acreage': posts[i].acreage,
+                        'userName': user.name,
+                        'userId': posts[i].user,
+                        'createdAt': posts[i].createdAt.getTime()
+                    }
+                    items.push(item);
                 }
                 res.status(200).json({ status: 200, message: 'Lấy danh sách bài đăng theo tài khoản thành công.', payload: items });
             }
