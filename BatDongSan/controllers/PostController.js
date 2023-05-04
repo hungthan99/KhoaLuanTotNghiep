@@ -184,7 +184,6 @@ const postController = {
         if (req.user.id == req.params.id) {
           const posts = await Post.find({
             user: req.params.id,
-            browseStatus: 1,
             $or: [{ status: 0 }, { status: 1 }],
           })
             .sort({ createdAt: -1 })
@@ -264,7 +263,6 @@ const postController = {
         if (req.user.id == req.params.id) {
           const posts = await Post.find({
             user: req.params.id,
-            browseStatus: 1,
             $or: [{ status: 0 }, { status: 1 }],
           }).sort({ createdAt: -1 });
           for (const i in posts) {
