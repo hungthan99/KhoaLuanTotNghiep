@@ -54,13 +54,11 @@ const postController = {
         const project = Project.findById(req.body.project);
         await project.updateOne({ $push: { posts: savedPost._id } });
       }
-      res
-        .status(200)
-        .json({
-          status: 200,
-          message: "Thêm bài đăng thành công.",
-          payload: null,
-        });
+      res.status(200).json({
+        status: 200,
+        message: "Thêm bài đăng thành công.",
+        payload: null,
+      });
     } catch (err) {
       res.status(500).json(err);
     }
@@ -114,13 +112,11 @@ const postController = {
           };
           items.push(item);
         }
-        res
-          .status(200)
-          .json({
-            status: 200,
-            message: "Lấy danh sách tất cả bài đăng thành công.",
-            payload: items,
-          });
+        res.status(200).json({
+          status: 200,
+          message: "Lấy danh sách tất cả bài đăng thành công.",
+          payload: items,
+        });
       } else {
         const posts = await Post.find().sort({ createdAt: -1 });
         const items = [];
@@ -161,13 +157,11 @@ const postController = {
           };
           items.push(item);
         }
-        res
-          .status(200)
-          .json({
-            status: 200,
-            message: "Lấy danh sách tất cả bài đăng thành công.",
-            payload: items,
-          });
+        res.status(200).json({
+          status: 200,
+          message: "Lấy danh sách tất cả bài đăng thành công.",
+          payload: items,
+        });
       }
     } catch (err) {
       res.status(500).json(err);
@@ -251,13 +245,11 @@ const postController = {
             items.push(item);
           }
         }
-        res
-          .status(200)
-          .json({
-            status: 200,
-            message: "Lấy danh sách bài đăng theo tài khoản thành công.",
-            payload: items,
-          });
+        res.status(200).json({
+          status: 200,
+          message: "Lấy danh sách bài đăng theo tài khoản thành công.",
+          payload: items,
+        });
       } else {
         let items = [];
         if (req.user.id == req.params.id) {
@@ -324,13 +316,11 @@ const postController = {
             items.push(item);
           }
         }
-        res
-          .status(200)
-          .json({
-            status: 200,
-            message: "Lấy danh sách bài đăng theo tài khoản thành công.",
-            payload: items,
-          });
+        res.status(200).json({
+          status: 200,
+          message: "Lấy danh sách bài đăng theo tài khoản thành công.",
+          payload: items,
+        });
       }
     } catch (err) {
       res.status(500).json(err);
@@ -345,6 +335,7 @@ const postController = {
         let skip = (page - 1) * limit;
         let items = [];
         const posts = await Post.find({ user: req.params.id })
+          .sort({ createdAt: -1 })
           .skip(skip)
           .limit(limit);
         for (const i in posts) {
@@ -373,16 +364,16 @@ const postController = {
           };
           items.push(item);
         }
-        res
-          .status(200)
-          .json({
-            status: 200,
-            message: "Lấy danh sách bài đăng theo tài khoản thành công.",
-            payload: items,
-          });
+        res.status(200).json({
+          status: 200,
+          message: "Lấy danh sách bài đăng theo tài khoản thành công.",
+          payload: items,
+        });
       } else {
         let items = [];
-        const posts = await Post.find({ user: req.params.id });
+        const posts = await Post.find({ user: req.params.id }).sort({
+          createdAt: -1,
+        });
         for (const i in posts) {
           const user = await User.findById(posts[i].user);
           const item = {
@@ -409,13 +400,11 @@ const postController = {
           };
           items.push(item);
         }
-        res
-          .status(200)
-          .json({
-            status: 200,
-            message: "Lấy danh sách bài đăng theo tài khoản thành công.",
-            payload: items,
-          });
+        res.status(200).json({
+          status: 200,
+          message: "Lấy danh sách bài đăng theo tài khoản thành công.",
+          payload: items,
+        });
       }
     } catch (err) {
       res.status(500).json(err);
@@ -465,14 +454,12 @@ const postController = {
           };
           items.push(item);
         }
-        res
-          .status(200)
-          .json({
-            status: 200,
-            message:
-              "Lấy danh sách bài đăng trong danh sách yêu thích thành công.",
-            payload: items,
-          });
+        res.status(200).json({
+          status: 200,
+          message:
+            "Lấy danh sách bài đăng trong danh sách yêu thích thành công.",
+          payload: items,
+        });
       } else {
         for (const i in likePosts) {
           const post = await Post.findById(likePosts[i]);
@@ -506,14 +493,12 @@ const postController = {
           };
           items.push(item);
         }
-        res
-          .status(200)
-          .json({
-            status: 200,
-            message:
-              "Lấy danh sách bài đăng trong danh sách yêu thích thành công.",
-            payload: items,
-          });
+        res.status(200).json({
+          status: 200,
+          message:
+            "Lấy danh sách bài đăng trong danh sách yêu thích thành công.",
+          payload: items,
+        });
       }
     } catch (err) {
       console.log("---> err", err);
@@ -557,14 +542,12 @@ const postController = {
           };
           items.push(item);
         }
-        res
-          .status(200)
-          .json({
-            status: 200,
-            message:
-              "Lấy danh sách bài đăng theo trạng thái đã bán hay chưa thành công.",
-            payload: items,
-          });
+        res.status(200).json({
+          status: 200,
+          message:
+            "Lấy danh sách bài đăng theo trạng thái đã bán hay chưa thành công.",
+          payload: items,
+        });
       } else {
         const posts = await Post.find({ isSell: isSell }).sort({
           createdAt: -1,
@@ -593,14 +576,12 @@ const postController = {
           };
           items.push(item);
         }
-        res
-          .status(200)
-          .json({
-            status: 200,
-            message:
-              "Lấy danh sách bài đăng theo trạng thái đã bán hay chưa thành công.",
-            payload: items,
-          });
+        res.status(200).json({
+          status: 200,
+          message:
+            "Lấy danh sách bài đăng theo trạng thái đã bán hay chưa thành công.",
+          payload: items,
+        });
       }
     } catch (err) {
       res.status(500).json(err);
@@ -686,13 +667,11 @@ const postController = {
           createdAt: post.createdAt.getTime(),
         };
       }
-      res
-        .status(200)
-        .json({
-          status: 200,
-          message: "Lấy thông tin bài đăng theo mã thành công.",
-          payload: data,
-        });
+      res.status(200).json({
+        status: 200,
+        message: "Lấy thông tin bài đăng theo mã thành công.",
+        payload: data,
+      });
     } catch (err) {
       res.status(500).json(err);
     }
@@ -702,13 +681,11 @@ const postController = {
     try {
       const post = await Post.findById(req.params.id);
       await post.updateOne({ $set: req.body });
-      res
-        .status(200)
-        .json({
-          status: 200,
-          message: "Cập nhật thông tin bài đăng thành công.",
-          payload: null,
-        });
+      res.status(200).json({
+        status: 200,
+        message: "Cập nhật thông tin bài đăng thành công.",
+        payload: null,
+      });
     } catch (err) {
       res.status(500).json(err);
     }
@@ -729,13 +706,11 @@ const postController = {
         { $pull: { posts: req.params.id } }
       );
       await Post.findByIdAndDelete(req.params.id);
-      res
-        .status(200)
-        .json({
-          status: 200,
-          message: "Đã xóa bài đăng thành công.",
-          payload: null,
-        });
+      res.status(200).json({
+        status: 200,
+        message: "Đã xóa bài đăng thành công.",
+        payload: null,
+      });
     } catch (err) {
       res.status(500).json(err);
     }
@@ -776,14 +751,12 @@ const postController = {
           };
           data.push(item);
         }
-        res
-          .status(200)
-          .json({
-            status: 200,
-            message:
-              "Lọc danh sách bài đăng theo thông tin đã được cung cấp thành công.",
-            payload: data,
-          });
+        res.status(200).json({
+          status: 200,
+          message:
+            "Lọc danh sách bài đăng theo thông tin đã được cung cấp thành công.",
+          payload: data,
+        });
       } else {
         const posts = await Post.find(req.body).sort({ createdAt: -1 });
         const data = [];
@@ -811,14 +784,12 @@ const postController = {
           };
           data.push(item);
         }
-        res
-          .status(200)
-          .json({
-            status: 200,
-            message:
-              "Lọc danh sách bài đăng theo thông tin đã được cung cấp thành công.",
-            payload: data,
-          });
+        res.status(200).json({
+          status: 200,
+          message:
+            "Lọc danh sách bài đăng theo thông tin đã được cung cấp thành công.",
+          payload: data,
+        });
       }
     } catch (err) {
       res.status(500).json(err);
@@ -863,14 +834,12 @@ const postController = {
           };
           data.push(item);
         }
-        res
-          .status(200)
-          .json({
-            status: 200,
-            message:
-              "Lọc danh sách bài đăng theo thông tin đã được cung cấp thành công.",
-            payload: data,
-          });
+        res.status(200).json({
+          status: 200,
+          message:
+            "Lọc danh sách bài đăng theo thông tin đã được cung cấp thành công.",
+          payload: data,
+        });
       } else {
         const search = req.body.keyword + "";
         const regex = new RegExp(`${search}`, "i");
@@ -902,14 +871,12 @@ const postController = {
           };
           data.push(item);
         }
-        res
-          .status(200)
-          .json({
-            status: 200,
-            message:
-              "Lọc danh sách bài đăng theo thông tin đã được cung cấp thành công.",
-            payload: data,
-          });
+        res.status(200).json({
+          status: 200,
+          message:
+            "Lọc danh sách bài đăng theo thông tin đã được cung cấp thành công.",
+          payload: data,
+        });
       }
     } catch (err) {
       res.status(500).json(err);
