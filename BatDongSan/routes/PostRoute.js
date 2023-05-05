@@ -23,6 +23,6 @@ router.delete('/:id', authController.verifyToken, postController.deletePost);
 
 router.post('/find', authController.verifyToken, postController.findPost);
 
-router.get('/search-by-keyword', authController.verifyToken, postController.searchByKeyWord);
+router.post('/search-by-keyword', authController.verifyToken, postController.searchByKeyWord);
 
 module.exports = router;

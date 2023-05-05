@@ -15,6 +15,6 @@ router.post('/find', authController.verifyToken, projectController.findProject);
 
 router.delete('/:id', authController.verifyToken, projectController.deleteProject);
 
-router.get('/search-by-keyword', authController.verifyToken, projectController.searchByKeyword);
+router.post('/search-by-keyword', authController.verifyToken, projectController.searchByKeyword);
 
 module.exports = router;
