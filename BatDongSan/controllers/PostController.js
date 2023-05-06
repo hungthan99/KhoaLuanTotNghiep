@@ -808,7 +808,8 @@ const postController = {
           $or: [{ address: { $regex: regex } }],
         })
           .skip(skip)
-          .limit(limit);
+          .limit(limit)
+          .sort({ createdAt: -1 });
         const data = [];
         for (const i in posts) {
           const user = await User.findById(posts[i].user);
@@ -845,7 +846,7 @@ const postController = {
         const regex = new RegExp(`${search}`, "i");
         const posts = await Post.find({
           $or: [{ address: { $regex: regex } }],
-        });
+        }).sort({ createdAt: -1 });
         const data = [];
         for (const i in posts) {
           const user = await User.findById(posts[i].user);
