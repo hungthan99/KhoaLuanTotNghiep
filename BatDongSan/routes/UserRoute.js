@@ -33,4 +33,6 @@ router.put('/dislike-post/:id', authController.verifyToken, userController.disli
 
 router.delete('/delete-user/:id', authController.verifyToken, userController.deleteUser);
 
+router.put('/change-password', authController.verifyToken, userController.changePassword);
+
 module.exports = router;
