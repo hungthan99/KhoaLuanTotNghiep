@@ -5,6 +5,10 @@ const optSchema = new mongoose.Schema({
         type: String,
         require: true
     },
+    email: {
+        type: String,
+        require: true
+    },
     otp: {
         type: String,
         require: true
