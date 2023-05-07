@@ -13,25 +13,25 @@ dotenv.config();
 
 const limit = process.env.PAGE_SIZE_FOR_USER;
 
-const { Vonage } = require("@vonage/server-sdk");
+// const { Vonage } = require("@vonage/server-sdk");
 
-const vonage = new Vonage({
-  apiKey: process.env.NEXMO_KEY,
-  apiSecret: process.env.NEXMO_SECRET,
-});
+// const vonage = new Vonage({
+//   apiKey: process.env.NEXMO_KEY,
+//   apiSecret: process.env.NEXMO_SECRET,
+// });
 
-async function sendSMS(to, from, text) {
-  await vonage.sms
-    .send({ to, from, text })
-    .then((resp) => {
-      console.log("Message sent successfully");
-      console.log(resp);
-    })
-    .catch((err) => {
-      console.log("There was an error sending the messages.");
-      console.error(err);
-    });
-}
+// async function sendSMS(to, from, text) {
+//   await vonage.sms
+//     .send({ to, from, text })
+//     .then((resp) => {
+//       console.log("Message sent successfully");
+//       console.log(resp);
+//     })
+//     .catch((err) => {
+//       console.log("There was an error sending the messages.");
+//       console.error(err);
+//     });
+// }
 
 async function sendOtpByEmail(mailTo, otp) {
   let transporter = nodemailer.createTransport({
@@ -61,12 +61,11 @@ const userController = {
     try {
       const user = await User.findOne({
         email: req.body.email,
-        phoneNumber: req.body.phoneNumber,
       });
       if (user) {
         return res.status(404).json({
           status: 404,
-          message: "Email hoặc số điện thoại này đã được đăng ký!",
+          message: "Email này đã được đăng ký!",
           payload: null,
         });
       }
@@ -79,17 +78,15 @@ const userController = {
         specialChars: false,
       });
       console.log(OTP);
-      const phoneNumber = req.body.phoneNumber;
-      sendSMS("84" + phoneNumber, "Vonage APIs", OTP);
       const email = req.body.email;
       sendOtpByEmail(email, OTP);
-      const otp = new Otp({ email: email, phoneNumber: phoneNumber, otp: OTP });
+      const otp = new Otp({ email: email, otp: OTP });
       const salt = await bcrypt.genSalt(10);
       otp.otp = await bcrypt.hash(otp.otp, salt);
       await otp.save();
       return res.status(200).send({
         status: 200,
-        message: "Mã otp đã được gửi tới email và sms cho việc đăng ký.",
+        message: "Mã otp đã được gửi tới email cho việc đăng ký.",
         payload: null,
       });
     } catch (err) {
@@ -101,12 +98,11 @@ const userController = {
     try {
       const user = await User.findOne({
         email: req.body.email,
-        phoneNumber: req.body.phoneNumber,
       });
       if (!user) {
         return res.status(404).json({
           status: 404,
-          message: "Email hoặc số điện thoại này chưa được đăng ký!",
+          message: "Email này chưa được đăng ký!",
           payload: null,
         });
       }
@@ -119,17 +115,15 @@ const userController = {
         specialChars: false,
       });
       console.log(OTP);
-      const phoneNumber = req.body.phoneNumber;
-      sendSMS("84" + phoneNumber, "Vonage APIs", OTP);
       const email = req.body.email;
       sendOtpByEmail(email, OTP);
-      const otp = new Otp({ email: email, phoneNumber: phoneNumber, otp: OTP });
+      const otp = new Otp({ email: email, otp: OTP });
       const salt = await bcrypt.genSalt(10);
       otp.otp = await bcrypt.hash(otp.otp, salt);
       await otp.save();
       return res.status(200).send({
         status: 200,
-        message: "Mã otp đã được gửi tới email và sms cho việc đổi mật khẩu.",
+        message: "Mã otp đã được gửi tới email cho việc đổi mật khẩu.",
         payload: null,
       });
     } catch (err) {
@@ -141,13 +135,12 @@ const userController = {
     try {
       const otpHolder = await Otp.find({
         email: req.body.email,
-        phoneNumber: req.body.phoneNumber,
       });
       if (otpHolder) {
         if (otpHolder.length === 0)
           return res.status(400).send({
             status: 400,
-            message: "Sai email hoặc số điện thoại!",
+            message: "Sai email!",
             payload: null,
           });
       }
@@ -157,13 +150,7 @@ const userController = {
           .send({ status: 400, message: "Mã otp đã hết hạn!", payload: null });
       const rightOtpFind = otpHolder[otpHolder.length - 1];
       const validUser = await bcrypt.compare(req.body.otp, rightOtpFind.otp);
-      if (
-        rightOtpFind.email &&
-        req.body.email &&
-        rightOtpFind.phoneNumber &&
-        req.body.phoneNumber &&
-        validUser
-      ) {
+      if (rightOtpFind.email && req.body.email && validUser) {
         res.status(200).json({
           status: 200,
           message: "Xác thực mã otp thành công.",
@@ -183,13 +170,12 @@ const userController = {
     try {
       const otpHolder = await Otp.find({
         email: req.body.email,
-        phoneNumber: req.body.phoneNumber,
       });
       if (otpHolder) {
         if (otpHolder.length === 0)
           return res.status(400).send({
             status: 400,
-            message: "Sai email hoặc số điện thoại!",
+            message: "Sai email!",
             payload: null,
           });
       }
@@ -199,18 +185,11 @@ const userController = {
           .send({ status: 400, message: "Mã otp đã hết hạn!", payload: null });
       const rightOtpFind = otpHolder[otpHolder.length - 1];
       const validUser = await bcrypt.compare(req.body.otp, rightOtpFind.otp);
-      if (
-        rightOtpFind.email &&
-        req.body.email &&
-        rightOtpFind.phoneNumber &&
-        req.body.phoneNumber &&
-        validUser
-      ) {
+      if (rightOtpFind.email && req.body.email && validUser) {
         const salt = await bcrypt.genSalt(10);
         const hashed = await bcrypt.hash(req.body.password, salt);
         const newUser = new User({
           email: req.body.email,
-          phoneNumber: req.body.phoneNumber,
           password: hashed,
         });
         const token = userController.generateAccessToken(newUser);
@@ -236,7 +215,6 @@ const userController = {
         };
         await Otp.deleteMany({
           email: rightOtpFind.email,
-          phoneNumber: rightOtpFind.phoneNumber,
         });
         res.status(200).json({
           status: 200,
@@ -257,13 +235,12 @@ const userController = {
     try {
       const otpHolder = await Otp.find({
         email: req.body.email,
-        phoneNumber: req.body.phoneNumber,
       });
       if (otpHolder) {
         if (otpHolder.length === 0)
           return res.status(400).send({
             status: 400,
-            message: "Sai email hoặc số điện thoại!",
+            message: "Sai email!",
             payload: null,
           });
       }
@@ -273,16 +250,9 @@ const userController = {
           .send({ status: 400, message: "Mã otp đã hết hạn!", payload: null });
       const rightOtpFind = otpHolder[otpHolder.length - 1];
       const validUser = await bcrypt.compare(req.body.otp, rightOtpFind.otp);
-      if (
-        rightOtpFind.email &&
-        req.body.email &&
-        rightOtpFind.phoneNumber &&
-        req.body.phoneNumber &&
-        validUser
-      ) {
+      if (rightOtpFind.email && req.body.email && validUser) {
         const user = await User.findOne({
           email: req.body.email,
-          phoneNumber: req.body.phoneNumber,
         });
         if (user) {
           const salt = await bcrypt.genSalt(10);
@@ -308,12 +278,11 @@ const userController = {
     try {
       const user = await User.findOne({
         email: req.body.email,
-        phoneNumber: req.body.phoneNumber,
       });
       if (!user) {
         return res.status(404).json({
           status: 404,
-          message: "Sai email hoặc số điện thoại!",
+          message: "Sai email!",
           payload: null,
         });
       }
