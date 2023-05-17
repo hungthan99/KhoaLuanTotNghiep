@@ -13,26 +13,6 @@ dotenv.config();
 
 const limit = process.env.PAGE_SIZE_FOR_USER;
 
-// const { Vonage } = require("@vonage/server-sdk");
-
-// const vonage = new Vonage({
-//   apiKey: process.env.NEXMO_KEY,
-//   apiSecret: process.env.NEXMO_SECRET,
-// });
-
-// async function sendSMS(to, from, text) {
-//   await vonage.sms
-//     .send({ to, from, text })
-//     .then((resp) => {
-//       console.log("Message sent successfully");
-//       console.log(resp);
-//     })
-//     .catch((err) => {
-//       console.log("There was an error sending the messages.");
-//       console.error(err);
-//     });
-// }
-
 async function sendOtpByEmail(mailTo, otp) {
   let transporter = nodemailer.createTransport({
     host: process.env.MAIL_HOST,

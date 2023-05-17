@@ -1,10 +1,6 @@
 const mongoose = require("mongoose");
 
 const optSchema = new mongoose.Schema({
-  // phoneNumber: {
-  //     type: String,
-  //     require: true
-  // },
   email: {
     type: String,
     require: true,
