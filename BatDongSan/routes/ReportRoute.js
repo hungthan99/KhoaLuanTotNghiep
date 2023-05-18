@@ -15,6 +15,12 @@ router.get(
   reportController.getReportById
 );
 
+router.get(
+  "/get-reports-by-status",
+  authController.verifyToken,
+  reportController.getReportsByStatus
+);
+
 router.post(
   "/add-report",
   authController.verifyToken,

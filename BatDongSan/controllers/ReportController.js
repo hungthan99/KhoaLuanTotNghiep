@@ -160,6 +160,71 @@ const ReportController = {
       res.status(500).json(err);
     }
   },
+
+  getReportsByStatus: async (req, res) => {
+    try {
+      let page = req.query.page;
+      if (page) {
+        page = parseInt(page);
+        let skip = (page - 1) * limit;
+        const reports = await Report.find({ status: req.body.status })
+          .skip(skip)
+          .limit(limit);
+        const items = [];
+        for (const i in reports) {
+          let reportUser = await User.findById(reports[i].reportUser);
+          let postUser = await User.findById(reports[i].postUser);
+          const item = {
+            id: reports[i].id,
+            reportUserId: reports[i].reportUser,
+            reportUserName: reportUser.name,
+            reportUserPhone: reportUser.phoneNumber,
+            postUserId: reports[i].postUser,
+            postUserName: postUser.name,
+            postUserPhone: postUser.phoneNumber,
+            postId: reports[i].post,
+            postTitle: reports[i].postTitle,
+            content: reports[i].content,
+            status: reports[i].status,
+          };
+          items.push(item);
+        }
+        res.status(200).json({
+          status: 200,
+          message: "Lấy danh sách báo cáo theo trạng thái thành công.",
+          payload: items,
+        });
+      } else {
+        const reports = await Report.find({ status: req.body.status });
+        const items = [];
+        for (const i in reports) {
+          let reportUser = await User.findById(reports[i].reportUser);
+          let postUser = await User.findById(reports[i].postUser);
+          const item = {
+            id: reports[i].id,
+            reportUserId: reports[i].reportUser,
+            reportUserName: reportUser.name,
+            reportUserPhone: reportUser.phoneNumber,
+            postUserId: reports[i].postUser,
+            postUserName: postUser.name,
+            postUserPhone: postUser.phoneNumber,
+            postId: reports[i].post,
+            postTitle: reports[i].postTitle,
+            content: reports[i].content,
+            status: reports[i].status,
+          };
+          items.push(item);
+        }
+        res.status(200).json({
+          status: 200,
+          message: "Lấy danh sách báo cáo theo trạng thái thành công.",
+          payload: items,
+        });
+      }
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  },
 };
 
 module.exports = ReportController;
