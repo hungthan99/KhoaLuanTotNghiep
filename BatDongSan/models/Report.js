@@ -24,6 +24,10 @@ const reportSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  status: {
+    type: Number,
+    default: 0,
+  },
   createAt: { type: Date, default: Date.now },
 });
 

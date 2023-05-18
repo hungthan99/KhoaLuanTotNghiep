@@ -21,6 +21,12 @@ router.post(
   reportController.addReport
 );
 
+router.put(
+  "/update-info-report/:id",
+  authController.verifyToken,
+  reportController.updateInfoReport
+);
+
 router.delete(
   "/delete-report/:id",
   authController.verifyToken,

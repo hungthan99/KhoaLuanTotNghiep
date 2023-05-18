@@ -14,13 +14,20 @@ const ReportController = {
         const reports = await Report.find().skip(skip).limit(limit);
         const items = [];
         for (const i in reports) {
+          let reportUser = await User.findById(reports[i].reportUser);
+          let postUser = await User.findById(reports[i].postUser);
           const item = {
             id: reports[i].id,
             reportUserId: reports[i].reportUser,
+            reportUserName: reportUser.name,
+            reportUserPhone: reportUser.phoneNumber,
             postUserId: reports[i].postUser,
+            postUserName: postUser.name,
+            postUserPhone: postUser.phoneNumber,
             postId: reports[i].post,
             postTitle: reports[i].postTitle,
             content: reports[i].content,
+            status: reports[i].status,
           };
           items.push(item);
         }
@@ -33,13 +40,20 @@ const ReportController = {
         const reports = await Report.find();
         const items = [];
         for (const i in reports) {
+          let reportUser = await User.findById(reports[i].reportUser);
+          let postUser = await User.findById(reports[i].postUser);
           const item = {
             id: reports[i].id,
             reportUserId: reports[i].reportUser,
+            reportUserName: reportUser.name,
+            reportUserPhone: reportUser.phoneNumber,
             postUserId: reports[i].postUser,
+            postUserName: postUser.name,
+            postUserPhone: postUser.phoneNumber,
             postId: reports[i].post,
             postTitle: reports[i].postTitle,
             content: reports[i].content,
+            status: reports[i].status,
           };
           items.push(item);
         }
@@ -57,13 +71,20 @@ const ReportController = {
   getReportById: async (req, res) => {
     try {
       const report = await Report.findById(req.params.id);
+      const reportUser = await User.findById(report.reportUser);
+      const postUser = await User.findById(report.postUser);
       const item = {
         id: report.id,
         reportUserId: report.reportUser,
+        reportUserName: reportUser.name,
+        reportUserPhone: reportUser.phoneNumber,
         postUserId: report.postUser,
+        postUserName: postUser.name,
+        postUserPhone: postUser.phoneNumber,
         postId: report.post,
         postTitle: report.postTitle,
         content: report.content,
+        status: report.status,
       };
       res.status(200).json({
         status: 200,
@@ -91,6 +112,29 @@ const ReportController = {
         message: "Thêm báo cáo thành công.",
         payload: null,
       });
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  },
+
+  updateInfoReport: async (req, res) => {
+    try {
+      const report = await Report.findById(req.params.id);
+      if (!report) {
+        res.status(404).json({
+          status: 404,
+          message: "Không tìm thấy mã report cần cập nhật thông tin.",
+          payload: null,
+        });
+      }
+      const reportUpdated = await report.updateOne({ $set: req.body });
+      if (reportUpdated) {
+        res.status(200).json({
+          status: 200,
+          message: "Cập nhật thông tin cho báo cáo thành công.",
+          payload: null,
+        });
+      }
     } catch (err) {
       res.status(500).json(err);
     }
