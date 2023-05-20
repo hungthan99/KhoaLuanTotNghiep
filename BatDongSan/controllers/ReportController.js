@@ -38,7 +38,7 @@ const ReportController = {
       if (page) {
         page = parseInt(page);
         let skip = (page - 1) * limit;
-        const reports = await Report.find().skip(skip).limit(limit);
+        const reports = await Report.find().skip(skip).limit(limit).sort({ createdAt: -1 });
         const items = [];
         for (const i in reports) {
           let reportUser = await User.findById(reports[i].reportUser);
@@ -57,6 +57,7 @@ const ReportController = {
             postTitle: reports[i].postTitle,
             content: reports[i].content,
             status: reports[i].status,
+            createdAt: reports[i].createdAt.getTime()
           };
           items.push(item);
         }
@@ -66,7 +67,7 @@ const ReportController = {
           payload: items,
         });
       } else {
-        const reports = await Report.find();
+        const reports = await Report.find().sort({ createdAt: -1 });
         const items = [];
         for (const i in reports) {
           let reportUser = await User.findById(reports[i].reportUser);
@@ -85,6 +86,7 @@ const ReportController = {
             postTitle: reports[i].postTitle,
             content: reports[i].content,
             status: reports[i].status,
+            createdAt: reports[i].createdAt.getTime()
           };
           items.push(item);
         }
@@ -118,6 +120,7 @@ const ReportController = {
         postTitle: report.postTitle,
         content: report.content,
         status: report.status,
+        createdAt: report.createdAt.getTime()
       };
       res.status(200).json({
         status: 200,
@@ -202,7 +205,7 @@ const ReportController = {
         let skip = (page - 1) * limit;
         const reports = await Report.find({ status: req.body.status })
           .skip(skip)
-          .limit(limit);
+          .limit(limit).sort({ createdAt: -1 });
         const items = [];
         for (const i in reports) {
           let reportUser = await User.findById(reports[i].reportUser);
@@ -221,6 +224,7 @@ const ReportController = {
             postTitle: reports[i].postTitle,
             content: reports[i].content,
             status: reports[i].status,
+            createdAt: reports[i].createdAt.getTime()
           };
           items.push(item);
         }
@@ -230,7 +234,7 @@ const ReportController = {
           payload: items,
         });
       } else {
-        const reports = await Report.find({ status: req.body.status });
+        const reports = await Report.find({ status: req.body.status }).sort({ createdAt: -1 });
         const items = [];
         for (const i in reports) {
           let reportUser = await User.findById(reports[i].reportUser);
@@ -247,6 +251,7 @@ const ReportController = {
             postTitle: reports[i].postTitle,
             content: reports[i].content,
             status: reports[i].status,
+            createdAt: reports[i].createdAt.getTime()
           };
           items.push(item);
         }
