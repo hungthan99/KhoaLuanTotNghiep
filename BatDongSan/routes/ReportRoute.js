@@ -39,7 +39,7 @@ router.delete(
   reportController.deleteReport
 );
 
-router.get(
+router.post(
   "/send-report-email",
   authController.verifyToken,
   reportController.sendReportEmail
