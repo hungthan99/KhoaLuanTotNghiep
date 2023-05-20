@@ -1,8 +1,35 @@
 const Post = require("../models/Post");
 const Report = require("../models/Report");
 const User = require("../models/User");
+const dotenv = require("dotenv");
+const nodemailer = require("nodemailer");
+
+dotenv.config();
 
 const limit = process.env.PAGE_SIZE_FOR_REPORT;
+
+async function sendEmailForReport(mailTo, content) {
+  let transporter = nodemailer.createTransport({
+    host: process.env.MAIL_HOST,
+    port: process.env.MAIL_PORT,
+    secure: false,
+    auth: {
+      user: process.env.MAIL_USERNAME,
+      pass: process.env.MAIL_PASSWORD,
+    },
+  });
+
+  let info = await transporter.sendMail({
+    from: process.env.MAIL_FROM_ADDRESS,
+    to: mailTo,
+    subject: "Your post was reported.",
+    html: `
+    <h1>${content}</h1>
+    `,
+  });
+
+  console.log("Message is sent your mail");
+}
 
 const ReportController = {
   getAllReport: async (req, res) => {
@@ -21,9 +48,11 @@ const ReportController = {
             reportUserId: reports[i].reportUser,
             reportUserName: reportUser.name,
             reportUserPhone: reportUser.phoneNumber,
+            reportUserEmail: reportUser.email,
             postUserId: reports[i].postUser,
             postUserName: postUser.name,
             postUserPhone: postUser.phoneNumber,
+            postUserEmail: postUser.email,
             postId: reports[i].post,
             postTitle: reports[i].postTitle,
             content: reports[i].content,
@@ -47,9 +76,11 @@ const ReportController = {
             reportUserId: reports[i].reportUser,
             reportUserName: reportUser.name,
             reportUserPhone: reportUser.phoneNumber,
+            reportUserEmail: reportUser.email,
             postUserId: reports[i].postUser,
             postUserName: postUser.name,
             postUserPhone: postUser.phoneNumber,
+            postUserEmail: postUser.email,
             postId: reports[i].post,
             postTitle: reports[i].postTitle,
             content: reports[i].content,
@@ -78,9 +109,11 @@ const ReportController = {
         reportUserId: report.reportUser,
         reportUserName: reportUser.name,
         reportUserPhone: reportUser.phoneNumber,
+        reportUserEmail: reportUser.email,
         postUserId: report.postUser,
         postUserName: postUser.name,
         postUserPhone: postUser.phoneNumber,
+        postUserEmail: postUser.email,
         postId: report.post,
         postTitle: report.postTitle,
         content: report.content,
@@ -220,6 +253,31 @@ const ReportController = {
           message: "Lấy danh sách báo cáo theo trạng thái thành công.",
           payload: items,
         });
+      }
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  },
+
+  sendReportEmail: async (req, res) => {
+    try {
+      const user = await User.find({ email: req.body.email });
+      if (user) {
+        sendEmailForReport(req.body.email, req.body.content);
+        res
+          .status(200)
+          .json({
+            status: 200,
+            message: "Gửi mail cho việc báo cáo tin đăng thành công",
+            payload: null,
+          });
+      } else {
+        res
+          .status(400)
+          .json({
+            status: 400,
+            message: "Tài khoản có email này không tồn tại",
+          });
       }
     } catch (err) {
       res.status(500).json(err);

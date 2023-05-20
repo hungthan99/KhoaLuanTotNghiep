@@ -39,4 +39,10 @@ router.delete(
   reportController.deleteReport
 );
 
+router.get(
+  "/send-report-email",
+  authController.verifyToken,
+  reportController.sendReportEmail
+);
+
 module.exports = router;
