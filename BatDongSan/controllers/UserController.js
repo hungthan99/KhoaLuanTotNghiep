@@ -446,6 +446,7 @@ const userController = {
         dateOfBirth: user.dateOfBirth,
         gender: user.gender,
         identityCardNumber: user.identityCardNumber,
+        isActive: user.isActive
       };
       return res.status(200).json({
         status: 200,
