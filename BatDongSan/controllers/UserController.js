@@ -8,6 +8,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const dotenv = require("dotenv");
 const nodemailer = require("nodemailer");
+const Report = require("../models/Report");
 
 dotenv.config();
 
@@ -446,7 +447,7 @@ const userController = {
         dateOfBirth: user.dateOfBirth,
         gender: user.gender,
         identityCardNumber: user.identityCardNumber,
-        isActive: user.isActive
+        isActive: user.isActive,
       };
       return res.status(200).json({
         status: 200,
@@ -538,6 +539,12 @@ const userController = {
         { posts: posts.id },
         { $pull: { posts: posts.id } }
       );
+      await Report.deleteMany({
+        reportUser: req.params.id,
+      });
+      await Report.deleteMany({
+        postUser: req.params.id,
+      });
       await User.findByIdAndDelete(req.params.id);
       res.status(200).json({
         status: 200,

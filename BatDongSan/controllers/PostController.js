@@ -3,6 +3,7 @@ const User = require("../models/User");
 const Project = require("../models/Project");
 
 const dotenv = require("dotenv");
+const Report = require("../models/Report");
 
 dotenv.config();
 
@@ -705,6 +706,9 @@ const postController = {
         { posts: req.params.id },
         { $pull: { posts: req.params.id } }
       );
+      await Report.deleteMany({
+        post: req.params.id,
+      });
       await Post.findByIdAndDelete(req.params.id);
       res.status(200).json({
         status: 200,
