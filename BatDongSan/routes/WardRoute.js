@@ -13,10 +13,4 @@ router.post(
   wardController.getWardsByDistrict
 );
 
-router.post(
-  "/p",
-  authController.verifyToken,
-  wardController.getWardsByProvince
-);
-
 module.exports = router;
